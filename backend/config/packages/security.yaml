@@ -1,0 +1,20 @@
+security:
+  providers:
+    api_user_provider:
+      entity:
+        class: App\Entity\User
+        property: apiToken
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    main:
+      stateless: true
+      provider: api_user_provider
+      custom_authenticators:
+                - App\Security\ApiKeyAuthenticator
+  password_hashers:
+        App\Entity\User: 'bcrypt'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+            algorithm: 'bcrypt'
+            cost:      12

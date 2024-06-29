@@ -4,13 +4,16 @@ namespace App\Entity;
 
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
 class Player
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name:"id", type:"string", length:30, unique:true)]
+    #[ORM\Column(name:"id", type: UuidType::NAME, unique:true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private ?string $id = null;
 
     #[ORM\Column(length: 255)]
