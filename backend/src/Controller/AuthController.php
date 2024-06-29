@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\JwtStrategy;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,25 +17,46 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AuthController extends AbstractController {
 
     private $userRepository;
+    private $jwtStrategy;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, JwtStrategy $jwtStrategy)
     {
         $this->userRepository = $userRepository;
+        $this->jwtStrategy = $jwtStrategy;
     }
 
     #[Route('/api/login')]
-    public function Login() {
+    public function Login(
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher
+    ) 
+    {
 
-        $result = [
-            [
-                'name' => 'Crystel'
-            ],
-            [
-                'name' => 'Tantely'
-            ]
-        ];
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
 
-        return $this->json($result);
+        $user = $this->userRepository->findOneUserByEmail($email);
+
+        if(!$user) {
+            return new JsonResponse("Bad credential!", Response::HTTP_BAD_REQUEST);
+        }
+
+        $isPasswordValid = $passwordHasher->isPasswordValid($user, $password);
+
+        if(!$isPasswordValid) {
+            return new JsonResponse("Bad credential!", Response::HTTP_BAD_REQUEST);
+        }
+
+        $token = $this->jwtStrategy->encode([
+            'email' => $user->getEmail(),
+            'id' => $user->getId()
+        ]);
+
+        return new JsonResponse([
+            
+                "token" => $token
+            
+        ]);
 
     }
 
@@ -44,11 +66,13 @@ class AuthController extends AbstractController {
         ValidatorInterface $validator, 
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
-    ) {
+    ) 
+    {
         
         $user = new User();
         
         $email = $request->request->get('email');
+        $username = $request->request->get('username');
         $password = $request->request->get('password');
         $confirmPassword = $request->request->get('confirmPassword');
 
@@ -59,6 +83,7 @@ class AuthController extends AbstractController {
         }
 
         $user->setEmail($email);
+        $user->setUsername($username);
 
         $errors = $validator->validate($user);
 
@@ -83,7 +108,16 @@ class AuthController extends AbstractController {
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return $this->json([]);
+        $token = $this->jwtStrategy->encode([
+            'email' => $user->getEmail(),
+            'id' => $user->getId()
+        ]);
+
+        return new JsonResponse([
+            
+                "token" => $token
+            
+        ]);
     }
 
 }
