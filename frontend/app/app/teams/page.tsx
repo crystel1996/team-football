@@ -1,4 +1,5 @@
 'use client';
+import { Header } from "@team-football/components/Header";
 import { List } from "@team-football/components/List";
 import { Title } from "@team-football/components/Title";
 import { Teams } from "@team-football/domains/repositories/Teams";
@@ -23,12 +24,15 @@ export default async function TeamsPage() {
     const teams = await getData();
 
     return (
-      <StyledWrapper className="grid place-items-center h-screen">
-        <Title title="Liste des équipes" subtitleLink={{ link: "/teams/add", title:"Ajouter" }} />
-        <div className="teams-content py-3">
-          <List items={teams} />
-        </div>
-      </StyledWrapper>
+      <>
+        <Header />
+        <StyledWrapper className="grid place-items-center h-screen">
+          <Title title="Liste des équipes" subtitleLink={{ link: "/teams/add", title:"Ajouter" }} />
+          <div className="teams-content py-3">
+            <List items={teams} />
+          </div>
+        </StyledWrapper>
+      </>
     );
   }
 

@@ -1,4 +1,5 @@
 'use client';
+import { Header } from "@team-football/components/Header";
 import { List, ListItemInterface } from "@team-football/components/List";
 import { Title } from "@team-football/components/Title";
 import { Players } from "@team-football/domains/repositories/Players";
@@ -31,12 +32,15 @@ export default async function PlayersPage() {
     });
 
     return (
-      <StyledWrapper className="grid place-items-center h-screen">
-        <Title title="Liste des joueurs" subtitleLink={{ link: "/players/add", title:"Ajouter" }} />
-        <div className="players-content py-3">
-          <List items={listPlayers} />
-        </div>
-      </StyledWrapper>
+      <>
+        <Header />
+        <StyledWrapper className="grid place-items-center h-screen">
+          <Title title="Liste des joueurs" subtitleLink={{ link: "/players/add", title:"Ajouter" }} />
+          <div className="players-content py-3">
+            <List items={listPlayers} />
+          </div>
+        </StyledWrapper>
+      </>
     );
   }
 
