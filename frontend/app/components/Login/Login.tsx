@@ -1,3 +1,4 @@
+'use client';
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { LoginComponentInterface, LoginInputInterface } from "./interface";
 
@@ -22,7 +23,7 @@ export const Login: FC<LoginComponentInterface> = () => {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-        
+
     };
 
     return  <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
