@@ -1,7 +1,7 @@
 export interface ListItemInterface {
-    title: string;
-    slug: string;
+    name: string;
     image?: string;
+    link?: string;
 }
 export interface ListComponentInterface {
     items: ListItemInterface[];
