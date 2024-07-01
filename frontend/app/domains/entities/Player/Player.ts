@@ -4,4 +4,5 @@ export interface PlayerEntity {
     firstName: string;
     lastName: string;
     balance: number;
+    image: string;
 }
