@@ -1,5 +1,5 @@
 'use client';
-import { List } from "@team-football/components/List";
+import { Card } from "@team-football/components/Card";
 import { Title } from "@team-football/components/Title";
 import { Teams } from "@team-football/domains/repositories/Teams";
 import styled from "styled-components";
@@ -21,11 +21,13 @@ export default async function TeamsPage() {
 
     const team = await getData();
 
+    const description = `${team.name} est une équipe provenant à ${team.country}. Son balance est: ${team.balance}.`
+
     return (
       <StyledWrapper className="grid place-items-center h-screen">
         <Title title={team.name} subtitleLink={{ link: "/teams/add", title:"Ajouter une autre équipe" }} />
-        <div className="teams-content py-3">
-          <List items={[team]} />
+        <div className="teams-content py-3 flex justify-center align-items">
+          <Card title={team.name} image={team.image} description={description} />
         </div>
       </StyledWrapper>
     );
