@@ -4,6 +4,8 @@ namespace App\Security;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class JwtStrategy {
     
@@ -40,6 +42,27 @@ class JwtStrategy {
     {
         return JWT::decode($jwt, new Key($this->jwtSecretKey, 'HS256'));
     }
+
+    public function replacePrefixToken($token)
+    {
+        return str_replace('Bearer ', '',$token);
+    }
+
+    public function checkValidationTokenFromApi(String $token = null) 
+    {
+        if(!$token) {
+            return new JsonResponse("UNAUTHORIZED", Response::HTTP_OK);
+        }
+
+        try {
+            $decoded = $this->decode($this->replacePrefixToken($token));
+            return new JsonResponse($decoded->data, Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+
+    }
+
 }
 
 ?>
