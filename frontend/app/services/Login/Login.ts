@@ -2,6 +2,8 @@ import axios from "axios";
 import { IsValidEmail } from "../Email";
 import { LoginInputInterface, LoginResultInterface } from "./interface";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export class LoginService {
     input: LoginInputInterface | undefined;
     constructor(input: LoginInputInterface) {
@@ -27,13 +29,13 @@ export class LoginService {
         }
     }
 
-    async submit(): Promise<LoginResultInterface> {
+    async submit() {
         const checkValidation = this.checkValidation();
         if (checkValidation.success) {
 
-            await axios({
+            return await axios({
                 method: 'post',
-                url: "http://localhost:8000/api/login",
+                url: `${API_URL}/api/login`,
                 data: {
                     email: this.input?.email,
                     password: this.input?.password
@@ -47,17 +49,17 @@ export class LoginService {
                 }
             })
             .catch((error) => {
-                console.log('[ERROR]', error.response.data);
+                console.log('[ERROR]', error?.response?.data);
                 return {
                     success: false,
                     message: error?.response?.data || 'Une erreur est survenue'
                 }
             });
-        }
-
-        return {
-            success: false,
-            message: checkValidation.message
+        } else {
+            return {
+                success: false,
+                message: checkValidation.message
+            }
         }
     }
 
