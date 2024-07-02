@@ -31,9 +31,9 @@ class AuthController extends AbstractController {
         UserPasswordHasherInterface $passwordHasher
     ) 
     {
-
-        $email = $request->request->get('email');
-        $password = $request->request->get('password');
+        $payload = json_decode($request->getContent(), false);
+        $email = $payload->email;
+        $password = $payload->password;
 
         $user = $this->userRepository->findOneUserByEmail($email);
 
@@ -118,6 +118,18 @@ class AuthController extends AbstractController {
                 "token" => $token
             
         ]);
+    }
+
+    #[Route('/api/me')]
+    public function me(
+        Request $request
+    ){
+        $token = $request->headers->get('Authorization');
+        return $this->jwtStrategy->checkValidationTokenFromApi($token);
+        
+        return new JsonResponse([
+            "message" => "Bonjour"
+        ], Response::HTTP_OK);
     }
 
 }

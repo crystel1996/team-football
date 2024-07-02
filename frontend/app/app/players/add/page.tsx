@@ -1,6 +1,8 @@
+import { MeComponent } from "@team-football/components/Me";
+
 export default function Players() {
     return (
-      <>List of players</>
+      <MeComponent>List of players</MeComponent>
     );
   }
   

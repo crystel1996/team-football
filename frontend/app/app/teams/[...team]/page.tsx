@@ -1,6 +1,7 @@
 'use client';
 import { Card } from "@team-football/components/Card";
 import { Header } from "@team-football/components/Header";
+import { MeComponent } from "@team-football/components/Me";
 import { Title } from "@team-football/components/Title";
 import { Teams } from "@team-football/domains/repositories/Teams";
 import styled from "styled-components";
@@ -25,7 +26,7 @@ export default async function TeamsPage() {
     const description = `${team.name} est une équipe provenant à ${team.country}. Son balance est: ${team.balance}.`
 
     return (
-      <>
+      <MeComponent>
         <Header />
         <StyledWrapper className="grid place-items-center h-screen">
           <Title title={team.name} subtitleLink={{ link: "/teams/add", title:"Ajouter une autre équipe" }} />
@@ -33,7 +34,7 @@ export default async function TeamsPage() {
             <Card title={team.name} image={team.image} description={description} />
           </div>
         </StyledWrapper>
-      </>
+      </MeComponent>
     );
   }
 

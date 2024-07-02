@@ -1,15 +1,18 @@
 'use client';
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import { LoginComponentInterface, LoginInputInterface } from "./interface";
+import { LoginComponentInterface } from "./interface";
+import { LoginInputInterface, LoginService } from "@team-football/services/Login";
 
 const DEFAULT_VALUE: LoginInputInterface = {
     email: "",
     password: ''
 }
 
-export const Login: FC<LoginComponentInterface> = () => {
+export const Login: FC<LoginComponentInterface> = (props) => {
 
     const [input, setInput] = useState<LoginInputInterface>(DEFAULT_VALUE);
+    const [error, setError] = useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.stopPropagation();
@@ -21,14 +24,33 @@ export const Login: FC<LoginComponentInterface> = () => {
         });
     };
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-
+      setLoading(true);
+      const loginService = new LoginService(input);
+      await loginService.submit().then((result) => {
+        if(result?.success) {
+            setLoading(false);
+            setError(result?.message);
+            window.location.href = props.redirectTo ?? '/';
+            return;
+        }
+        if(!result?.success) {
+            setLoading(false);
+            setError(result?.message);
+        }
+      });
+      
     };
 
     return  <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
                 <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md">
                     <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200">Team Football</h1>
+                    {error && (
+                        <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                            <span className="font-medium">Erreur!</span> {error}
+                        </div>
+                    )}
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Adresse email</label>
@@ -38,7 +60,7 @@ export const Login: FC<LoginComponentInterface> = () => {
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mot de passe</label>
                             <input name="password" value={input.password} onChange={handleChange} type="password" id="password" className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Entrer votre mot de passe" required />
                         </div>
-                        <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Se connecter</button>
+                        <button disabled={loading} type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">{loading ? 'Chargement...' : 'Se connecter'}</button>
                     </form>
                 </div>
             </div>
