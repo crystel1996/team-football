@@ -1,6 +1,3 @@
-export interface LoginComponentInterface {}
-
-export interface LoginInputInterface {
-    email: string;
-    password: string;
+export interface LoginComponentInterface {
+    redirectTo?: string;
 }

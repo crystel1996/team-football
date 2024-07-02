@@ -1,15 +1,17 @@
 'use client';
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import { LoginComponentInterface, LoginInputInterface } from "./interface";
+import { LoginComponentInterface } from "./interface";
+import { LoginInputInterface, LoginService } from "@team-football/services/Login";
 
 const DEFAULT_VALUE: LoginInputInterface = {
     email: "",
     password: ''
 }
 
-export const Login: FC<LoginComponentInterface> = () => {
+export const Login: FC<LoginComponentInterface> = (props) => {
 
     const [input, setInput] = useState<LoginInputInterface>(DEFAULT_VALUE);
+    const [error, setError] = useState<string | undefined>(undefined);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.stopPropagation();
@@ -21,14 +23,27 @@ export const Login: FC<LoginComponentInterface> = () => {
         });
     };
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-
+      const loginService = new LoginService(input);
+      const result = await loginService.submit();
+      if(result.success) {
+        window.location.href = props.redirectTo ?? '/';
+        return;
+      }
+      if(!result.success) {
+        setError(result.message);
+      }
     };
 
     return  <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
                 <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md">
                     <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200">Team Football</h1>
+                    {error && (
+                        <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                            <span className="font-medium">Erreur!</span> {error}
+                        </div>
+                    )}
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Adresse email</label>

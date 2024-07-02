@@ -31,9 +31,9 @@ class AuthController extends AbstractController {
         UserPasswordHasherInterface $passwordHasher
     ) 
     {
-
-        $email = $request->request->get('email');
-        $password = $request->request->get('password');
+        $payload = json_decode($request->getContent(), false);
+        $email = $payload->email;
+        $password = $payload->password;
 
         $user = $this->userRepository->findOneUserByEmail($email);
 
