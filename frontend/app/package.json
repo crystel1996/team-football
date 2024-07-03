@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/swc-win32-x64-msvc": "^14.2.4",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "next": "14.2.4",
