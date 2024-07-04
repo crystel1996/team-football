@@ -50,17 +50,26 @@ class JwtStrategy {
 
     public function checkValidationTokenFromApi(String $token = null) 
     {
-        if(!$token) {
-            return new JsonResponse("UNAUTHORIZED", Response::HTTP_OK);
+        if($token == null) {
+            return "UNAUTHORIZED";
         }
 
         try {
             $decoded = $this->decode($this->replacePrefixToken($token));
-            return new JsonResponse($decoded->data, Response::HTTP_OK);
+            return $decoded->data;
         } catch(\Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+            return $e->getMessage();
         }
 
+    }
+
+    public function isValidToken(String $token = null)
+    {
+        $checking = $this->checkValidationTokenFromApi($token);
+        if(is_object($checking) && $checking->id) {
+            return new JsonResponse($checking, Response::HTTP_OK);
+        }
+        return new JsonResponse($checking, Response::HTTP_UNAUTHORIZED);
     }
 
 }

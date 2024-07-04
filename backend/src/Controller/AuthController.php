@@ -125,7 +125,7 @@ class AuthController extends AbstractController {
         Request $request
     ){
         $token = $request->headers->get('Authorization');
-        return $this->jwtStrategy->checkValidationTokenFromApi($token);
+        return $this->jwtStrategy->isValidToken($token);
     }
 
 }

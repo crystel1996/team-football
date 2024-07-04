@@ -9,10 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Unique;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
+#[UniqueEntity('slug')]
 class Team
 {
     #[ORM\Id]
@@ -130,7 +131,6 @@ class Team
         $metadata->addPropertyConstraint('name', new NotNull());
         $metadata->addPropertyConstraint('country', new NotNull());
         $metadata->addPropertyConstraint('image', new NotNull());
-        $metadata->addPropertyConstraint('slug', new Unique());
     }
 
     public function getSlug(): ?string

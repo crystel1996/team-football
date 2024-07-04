@@ -28,26 +28,23 @@ class TeamController extends AbstractController {
         TeamRepository $teamRepository
     ) 
     {   
-        try {
-            $token = $request->headers->get('Authorization');
-            $this->jwtStrategy->checkValidationTokenFromApi($token);
-        } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+       
+        $token = $request->headers->get('Authorization');
+        $decoded = $this->jwtStrategy->isValidToken($token);
+        
+        if($decoded->getStatusCode() !== Response::HTTP_OK) {
+            return $decoded;
         }
 
         $team = new Team();
-        
+    
         $payload = json_decode($request->getContent(), false);
-        $name = $payload->name;
-        $country = $payload->country;
-        $balance = $payload->balance;
-        $image = $payload->image;
 
         $team->setName($payload->name);
         $team->setCountry($payload->country);
         $team->setBalance($payload->balance);
         $team->setImage($payload->image);
-        $team->setSlug(str_replace(' ', '-', $payload->name));
+        $team->setSlug(str_replace(' ', '-', strtolower($payload->name)));
 
         $errors = $validator->validate($team);
 
@@ -59,8 +56,13 @@ class TeamController extends AbstractController {
         }
 
         $teamCreated = $teamRepository->save($team);
-
-        return new JsonResponse($teamCreated, Response::HTTP_OK);
+        
+        return new JsonResponse([
+            
+            "team" => $teamCreated->getId()
+        
+        ]);
+       
 
     }
 
