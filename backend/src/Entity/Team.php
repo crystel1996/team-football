@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Unique;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -34,6 +35,12 @@ class Team
      */
     #[ORM\OneToMany(targetEntity: Player::class, mappedBy: 'idTeam')]
     private Collection $players;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
     public function __construct()
     {
@@ -123,5 +130,30 @@ class Team
         $metadata->addPropertyConstraint('name', new NotNull());
         $metadata->addPropertyConstraint('country', new NotNull());
         $metadata->addPropertyConstraint('image', new NotNull());
+        $metadata->addPropertyConstraint('slug', new Unique());
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }
