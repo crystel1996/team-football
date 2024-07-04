@@ -22,7 +22,7 @@
         "symfony/framework-bundle": "7.1.*",
         "symfony/password-hasher": "7.1.*",
         "symfony/requirements-checker": "^2.0",
-        "symfony/runtime": "7.1.*",
+        "symfony/runtime": "^7.1",
         "symfony/security-bundle": "7.1.*",
         "symfony/uid": "7.1.*",
         "symfony/validator": "7.1.*",
