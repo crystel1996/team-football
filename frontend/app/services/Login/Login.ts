@@ -1,6 +1,6 @@
 import axios from "axios";
 import { IsValidEmail } from "../Email";
-import { LoginInputInterface, LoginResultInterface } from "./interface";
+import { LoginInputInterface } from "./interface";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

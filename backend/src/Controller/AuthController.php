@@ -95,7 +95,7 @@ class AuthController extends AbstractController {
             
             $errorsString = (string) $errors;
     
-            return new Response($errorsString);
+            return new Response($errorsString, Response::HTTP_BAD_REQUEST);
         }
 
         $hashedPassword = $passwordHasher->hashPassword(

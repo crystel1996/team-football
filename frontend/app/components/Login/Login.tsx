@@ -48,7 +48,7 @@ export const Login: FC<LoginComponentInterface> = (props) => {
                     <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200">Team Football</h1>
                     {error && (
                         <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                            <span className="font-medium">Erreur!</span> {error}
+                            {error}
                         </div>
                     )}
                     <form onSubmit={handleSubmit}>

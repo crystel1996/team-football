@@ -52,7 +52,7 @@ class TeamController extends AbstractController {
             
             $errorsString = (string) $errors;
     
-            return new Response($errorsString);
+            return new Response($errorsString, Response::HTTP_BAD_REQUEST);
         }
 
         $teamCreated = $teamRepository->save($team);
