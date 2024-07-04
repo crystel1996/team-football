@@ -16,6 +16,16 @@ class TeamRepository extends ServiceEntityRepository
         parent::__construct($registry, Team::class);
     }
 
+    /**
+        * @return Team Returns an Team
+    */
+    public function save(Team $team) 
+    {
+        $this->getEntityManager()->persist($team);
+        $this->getEntityManager()->flush();
+        return $team;
+    }
+
     //    /**
     //     * @return Team[] Returns an array of Team objects
     //     */
