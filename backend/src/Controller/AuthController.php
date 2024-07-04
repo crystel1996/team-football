@@ -126,10 +126,6 @@ class AuthController extends AbstractController {
     ){
         $token = $request->headers->get('Authorization');
         return $this->jwtStrategy->checkValidationTokenFromApi($token);
-        
-        return new JsonResponse([
-            "message" => "Bonjour"
-        ], Response::HTTP_OK);
     }
 
 }

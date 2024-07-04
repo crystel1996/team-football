@@ -6,8 +6,10 @@ use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -114,5 +116,12 @@ class Team
         }
 
         return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('name', new NotNull());
+        $metadata->addPropertyConstraint('country', new NotNull());
+        $metadata->addPropertyConstraint('image', new NotNull());
     }
 }
