@@ -1,6 +1,7 @@
 'use client';
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import { AddTeamsComponentInterface, AddTeamsInputInterface } from "./interface";
+import { AddTeamsComponentInterface } from "./interface";
+import { AddTeamService, AddTeamsInputInterface } from "@team-football/services/Teams/Add";
 
 const DEFAULT_VALUE: AddTeamsInputInterface = {
     name: '',
@@ -39,7 +40,18 @@ export const AddTeams: FC<AddTeamsComponentInterface> = () => {
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
-        
+        const addTeamService = new AddTeamService(input);
+        await addTeamService.submit().then((result) => {
+            if(result?.success) {
+                setLoading(false);
+                setError(result?.message);
+                return;
+            }
+            if(!result?.success) {
+                setLoading(false);
+                setError(result?.message);
+            }
+        });
     };
 
     return  <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
