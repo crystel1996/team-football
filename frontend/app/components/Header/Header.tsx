@@ -3,7 +3,7 @@ import { FC, MouseEvent, useState } from "react";
 import { HeaderComponentInterface } from "./interface";
 import { Logout } from "@team-football/services/Logout";
 
-export const Header: FC<HeaderComponentInterface> = () => {
+export const Header: FC<HeaderComponentInterface> = (props) => {
 
     const [hiddenMenu, setHiddenMenu] = useState<boolean>(true);
 
@@ -14,9 +14,7 @@ export const Header: FC<HeaderComponentInterface> = () => {
 
     const handleLogout = (event: MouseEvent<HTMLElement>) => {
         event.stopPropagation();
-        Logout({
-            redirectTo: '/'
-        });
+        props.logout();
     };
 
     return  <nav className="bg-gray-800">

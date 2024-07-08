@@ -1,6 +1,8 @@
+import { cookies } from "next/headers";
 import { LogoutServiceInterface } from "./interface";
+import { redirect } from "next/navigation";
 
 export const Logout = (input: LogoutServiceInterface) => {
-    localStorage.removeItem('accessToken');
-    window.location.href = input.redirectTo ?? '/';
+    cookies().delete('accessToken')
+    redirect(input.redirectTo ?? '/')
 }

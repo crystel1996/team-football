@@ -1,1 +1,3 @@
-export interface HeaderComponentInterface {}
+export interface HeaderComponentInterface {
+    logout: () => void;
+}

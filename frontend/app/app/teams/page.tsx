@@ -25,15 +25,15 @@ export default async function TeamsPage() {
     const teams = await getData();
 
     return (
-      <MeComponent>
-        <Header />
+      <>
+        <MeComponent />
         <StyledWrapper className="grid place-items-center h-screen">
           <Title title="Liste des équipes" subtitleLink={{ link: "/teams/add", title:"Ajouter" }} />
           <div className="teams-content py-3">
             <List items={teams} />
           </div>
         </StyledWrapper>
-      </MeComponent>
+      </>
     );
   }
 

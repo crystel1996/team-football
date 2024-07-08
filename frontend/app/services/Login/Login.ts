@@ -1,6 +1,7 @@
 import axios from "axios";
 import { IsValidEmail } from "../Email";
 import { LoginInputInterface } from "./interface";
+import { cookies } from "next/headers";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -42,9 +43,10 @@ export class LoginService {
                 }
             })
             .then((result) => {
-                localStorage.setItem('accessToken', result.data.token);
+                cookies().set('accessToken', result.data.token);
                 return {
                     success: true,
+                    data: result.data.token,
                     message: "Connexion reussie."
                 }
             })
@@ -52,12 +54,14 @@ export class LoginService {
                 console.log('[ERROR]', error?.response?.data);
                 return {
                     success: false,
+                    data: undefined,
                     message: error?.response?.data || 'Une erreur est survenue'
                 }
             });
         } else {
             return {
                 success: false,
+                data: undefined,
                 message: checkValidation.message
             }
         }
