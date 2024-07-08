@@ -10,7 +10,7 @@ const DEFAULT_VALUE: AddTeamsInputInterface = {
     image: undefined
 }
 
-export const AddTeams: FC<AddTeamsComponentInterface> = () => {
+export const AddTeams: FC<AddTeamsComponentInterface> = (props) => {
 
     const [input, setInput] = useState<AddTeamsInputInterface>(DEFAULT_VALUE);
     const [error, setError] = useState<string | undefined>(undefined);
@@ -40,18 +40,24 @@ export const AddTeams: FC<AddTeamsComponentInterface> = () => {
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
-        const addTeamService = new AddTeamService(input);
-        await addTeamService.submit().then((result) => {
-            if(result?.success) {
-                setLoading(false);
-                setError(result?.message);
-                return;
-            }
-            if(!result?.success) {
-                setLoading(false);
-                setError(result?.message);
-            }
-        });
+        const inputStringify = JSON.stringify({...input, image: {
+            size: input.image?.size,
+            name: input.image?.name,
+            type: input.image?.type
+        }});
+        
+        const result = await props.onSubmit(inputStringify);
+        
+        if(result?.success) {
+            setLoading(false);
+            setError(result?.message);
+            return;
+        }
+        if(!result?.success) {
+            setLoading(false);
+            setError(result?.message);
+        }
+        
     };
 
     return  <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">

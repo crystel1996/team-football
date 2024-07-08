@@ -1,10 +1,11 @@
 import axios from "axios";
-import { AddTeamsInputInterface } from "./interface";
+import { AddTeamsInputInterface, AddTeamsSubmitInterface } from "./interface";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export class AddTeamService {
     input: AddTeamsInputInterface | undefined;
+    accessToken: string | undefined | null;
 
     constructor(input: AddTeamsInputInterface) {
         this.input = input;
@@ -51,7 +52,7 @@ export class AddTeamService {
         }
     }
 
-    async submit() {
+    async submit(input: AddTeamsSubmitInterface) {
         const checkValidation = this.checkValidation();
         if(checkValidation.isValid) {
             return await axios({
@@ -64,10 +65,11 @@ export class AddTeamService {
                     image: 'https://cdn.statically.io/gh/hjnilsson/country-flags/master/svg/mg.svg' //this.input?.image
                 },
                 headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('accessToken')
+                    Authorization: 'Bearer ' +  input.accessToken
                 }
             })
             .then((result) => {
+                console.log('[ERROR]', result);
                 return {
                     success: true,
                     message: "Equipe ajouté."

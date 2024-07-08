@@ -4,3 +4,7 @@ export interface AddTeamsInputInterface {
     balance: number;
     image?: File;
 }
+
+export interface AddTeamsSubmitInterface {
+    accessToken: string
+}
