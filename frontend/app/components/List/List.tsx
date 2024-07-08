@@ -8,11 +8,20 @@ export const List: FC<ListComponentInterface> = (props) => {
                         <div className="flex items-center min-w-0 gap-x-4">
                             {item.image && (<img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={item.image} alt={item.image} />)}
                             <div className="min-w-0 flex-auto align-items">
-                                {item.link && (
-                                    <a href={item.link} className="text-sm font-semibold leading-6 text-gray-900 ">{item.name}</a>
-                                )}
-                                {!item.link && (
-                                    <p className="text-sm font-semibold leading-6 text-gray-900 ">{item.name}</p>
+                                <div>
+                                    {item.link && (
+                                        <a href={item.link} className="text-sm font-semibold leading-6 text-gray-900 ">{item.name}</a>
+                                    )}
+                                    {!item.link && (
+                                        <p className="text-sm font-semibold leading-6 text-gray-900 ">{item.name}</p>
+                                    )}
+                                </div>
+                                {item.subtitle && (
+                                    <div>
+                                        
+                                        <p  className="text-sm text-gray-600 ">{item.subtitle}</p>
+                                        
+                                    </div>
                                 )}
                             </div>
                         </div>

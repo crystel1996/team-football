@@ -48,7 +48,7 @@ export default async function TeamsPage({
         <MeComponent />
         <div className="grid place-items-center h-screen w-screen min-[992px]:w-600">
           <Title title="Liste des équipes" subtitleLink={{ link: "/teams/add", title:"Ajouter" }} />
-          <div className="teams-content py-3">
+          <div className="teams-content py-3 w-screen">
             <List items={teams.listTeams.data} />
           </div>
         </div>

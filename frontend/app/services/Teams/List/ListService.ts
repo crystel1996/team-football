@@ -21,6 +21,7 @@ export class ListTeamsService {
                     return {
                         ...team,
                         link: `/teams/${team.slug}`,
+                        subtitle: `Balance: ${team.balance}$`,
                         slug: undefined,
                     }
                 })
