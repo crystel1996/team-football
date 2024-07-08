@@ -43,8 +43,6 @@ export default async function TeamsPage({
       searchParams
     });
 
-    console.log('[teams]', teams)
-
     return (
       <>
         <MeComponent />
