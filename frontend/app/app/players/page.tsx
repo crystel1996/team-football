@@ -1,4 +1,3 @@
-'use client';
 import { List, ListItemInterface } from "@team-football/components/List";
 import { MeComponent } from "@team-football/components/Me";
 import { Title } from "@team-football/components/Title";
@@ -34,24 +33,13 @@ export default async function PlayersPage() {
     return (
       <>
         <MeComponent />
-        <StyledWrapper className="grid place-items-center h-screen">
+        <div className="grid place-items-center h-screen w-screen min-[992px]:w-600">
           <Title title="Liste des joueurs" subtitleLink={{ link: "/players/add", title:"Ajouter" }} />
           <div className="players-content py-3">
             <List items={listPlayers} />
           </div>
-        </StyledWrapper>
+        </div>
       </>
     );
   }
-
-const StyledWrapper = styled.div`
-
-  .players-content {
-    width: 100vw;
-    @media (min-width: 992px) {
-      width: 600px;
-    }
-  }
-
-`;
 
