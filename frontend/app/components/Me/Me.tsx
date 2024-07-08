@@ -1,31 +1,40 @@
-'use client';
-import { FC, useEffect, useState } from "react";
+'use server';
+import { FC } from "react";
 import { MeInterface } from "./interface";
-import { UserContext } from "@team-football/context/UserContext";
 import { Me } from "@team-football/services/Me";
-import { UserEntity } from "@team-football/domains/entities/User";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { Header } from "../Header";
+import { Logout } from "@team-football/services/Logout";
 
-export const MeComponent: FC<MeInterface> = (props) => {
-    const [user, setUser] = useState<UserEntity | undefined>(undefined);
-    useEffect(() => {
-        const handleGetMe = async () => {
-            if (!user) {
-                const me = new Me();
-                const result = await me.getMe({
-                    token: localStorage.getItem('accessToken') ?? ''
-                });
-                if(!result?.id) {
-                    window.location.href = "/login";
-                    return;
-                }
-                setUser(result);
-            }
-        };
-        handleGetMe();
+const getData = async () => {
+    const me = new Me();
 
-    }, []);
+    const checkMe = await me.getMe({
+        token: cookies().get('accessToken')?.value ?? ''
+    });
 
-    return <UserContext.Provider value={{ user: user }}>
-        {user ? props.children : <></>}
-    </UserContext.Provider>
+    const logout = () => {
+        'use server';
+        Logout({
+            redirectTo: '/login'
+        });
+    }
+
+    if (!checkMe.success) {
+        redirect('/login');
+    }
+    
+    return {
+        me: checkMe.data,
+        logout: logout
+    }
+
+}
+
+export const MeComponent: FC<MeInterface> = async (props) => {
+   
+    const data = await getData();
+
+    return <Header logout={data.logout} />
 }

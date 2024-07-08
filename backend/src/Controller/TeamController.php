@@ -11,6 +11,7 @@ use App\Security\JwtStrategy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class TeamController extends AbstractController {
 
@@ -63,6 +64,38 @@ class TeamController extends AbstractController {
         
         ]);
        
+
+    }
+
+    #[Route('/api/list-team/{page}', name: 'list_team', requirements: ['page' => '\d+'])]
+    public function list(
+        int $page, 
+        Request $request, 
+        TeamRepository $teamRepository,
+        SerializerInterface $serializer
+    )
+    {
+        $token = $request->headers->get('Authorization');
+        $decoded = $this->jwtStrategy->isValidToken($token);
+        
+        if($decoded->getStatusCode() !== Response::HTTP_OK) {
+            return $decoded;
+        }
+
+        if ($page < 1) {
+            return new JsonResponse('La page doit etre 1 ou plus.', Response::HTTP_BAD_REQUEST);
+        }
+
+        $teams = $teamRepository->findAllTeam($page);
+
+        $data = $serializer->serialize($teams, 'json', ['groups' => 'list_team:read']);
+
+        return $this->json([
+            "data" => json_decode($data),
+            "count" => $teamRepository->count()
+        ], 
+            Response::HTTP_OK
+        );
 
     }
 

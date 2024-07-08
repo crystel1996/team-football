@@ -1,3 +1,9 @@
+import { LoginInputInterface } from "@team-football/services/Login";
+
 export interface LoginComponentInterface {
-    redirectTo?: string;
+    checkLogin: (input: LoginInputInterface) => Promise<{
+        message: string;
+        success: boolean;
+        data?: any;
+    }>
 }

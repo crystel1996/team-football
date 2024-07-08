@@ -11,6 +11,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 #[UniqueEntity('slug')]
@@ -20,15 +21,19 @@ class Team
     #[ORM\Column(name:"id", type: UuidType::NAME, unique:true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups("list_team:read")]
     private ?string $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("list_team:read")]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("list_team:read")]
     private ?string $country = null;
 
     #[ORM\Column]
+    #[Groups("list_team:read")]
     private ?float $balance = null;
 
     /**
@@ -38,9 +43,11 @@ class Team
     private Collection $players;
 
     #[ORM\Column(length: 255)]
+    #[Groups("list_team:read")]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("list_team:read")]
     private ?string $image = null;
 
     public function __construct()

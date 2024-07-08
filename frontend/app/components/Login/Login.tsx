@@ -1,7 +1,7 @@
 'use client';
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { LoginComponentInterface } from "./interface";
-import { LoginInputInterface, LoginService } from "@team-football/services/Login";
+import { LoginInputInterface } from "@team-football/services/Login";
 
 const DEFAULT_VALUE: LoginInputInterface = {
     email: "",
@@ -25,21 +25,19 @@ export const Login: FC<LoginComponentInterface> = (props) => {
     };
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      setLoading(true);
-      const loginService = new LoginService(input);
-      await loginService.submit().then((result) => {
-        if(result?.success) {
+        event.preventDefault();
+        setLoading(true);
+        const checkLogin = await props.checkLogin(input);
+
+        if (checkLogin?.success) {
             setLoading(false);
-            setError(result?.message);
-            window.location.href = props.redirectTo ?? '/';
+            setError(checkLogin?.message);
+            window.location.href = '/';
             return;
-        }
-        if(!result?.success) {
+        } else {
             setLoading(false);
-            setError(result?.message);
+            setError(checkLogin?.message);
         }
-      });
       
     };
 

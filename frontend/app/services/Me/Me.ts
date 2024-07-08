@@ -13,10 +13,17 @@ export class Me {
             }
         })
         .then((result) => {
-            return result?.data;
+            return {
+                success: true,
+                data: result?.data
+            }
         })
         .catch((error) => {
             console.log('[ERROR]', error?.response?.data);
+            return {
+                success: false,
+                data: undefined
+            }
         });
     }
 }

@@ -26,6 +26,28 @@ class TeamRepository extends ServiceEntityRepository
         return $team;
     }
 
+    /**
+    * @return Team[] Returns an array of Team objects
+    */
+    public function findAllTeam(Int $page): array
+    {
+
+        $offset = 0;
+        $limit = 12;
+
+        if ($page > 1) {
+            $offset = 12 * $page;
+        }
+
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.name', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     //    /**
     //     * @return Team[] Returns an array of Team objects
     //     */
