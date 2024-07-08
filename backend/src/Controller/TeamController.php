@@ -91,7 +91,7 @@ class TeamController extends AbstractController {
         $data = $serializer->serialize($teams, 'json', ['groups' => 'list_team:read']);
 
         return $this->json([
-            "data" => $data,
+            "data" => json_decode($data),
             "count" => $teamRepository->count()
         ], 
             Response::HTTP_OK

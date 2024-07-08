@@ -38,13 +38,6 @@ class TeamRepository extends ServiceEntityRepository
         if ($page > 1) {
             $offset = 12 * $page;
         }
-        
-        return $this->createQueryBuilder('t')
-            ->orderBy('t.name', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
 
         return $this->createQueryBuilder('t')
             ->orderBy('t.name', 'ASC')
