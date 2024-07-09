@@ -9,6 +9,7 @@ const getData = async () => {
     "use server";
     const loginService = new LoginService(input);
     const result = await loginService.submit();
+
     return result;
   };
 

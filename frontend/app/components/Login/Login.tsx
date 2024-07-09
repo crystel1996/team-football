@@ -28,7 +28,7 @@ export const Login: FC<LoginComponentInterface> = (props) => {
         event.preventDefault();
         setLoading(true);
         const checkLogin = await props.checkLogin(input);
-
+        console.log('[RESULT]', checkLogin)
         if (checkLogin?.success) {
             setLoading(false);
             setError(checkLogin?.message);

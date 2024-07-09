@@ -1,13 +1,13 @@
 import axios from "axios";
-import { AddTeamsInputInterface, AddTeamsSubmitInterface } from "./interface";
+import { UpdateTeamsInputInterface, UpdateTeamsSubmitInterface } from "./interface";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export class AddTeamService {
-    input: AddTeamsInputInterface | undefined;
+export class UpdateTeamService {
+    input: UpdateTeamsInputInterface | undefined;
     accessToken: string | undefined | null;
 
-    constructor(input: AddTeamsInputInterface) {
+    constructor(input: UpdateTeamsInputInterface) {
         this.input = input;
     } 
 
@@ -52,13 +52,14 @@ export class AddTeamService {
         }
     }
 
-    async submit(input: AddTeamsSubmitInterface) {
+    async submit(input: UpdateTeamsSubmitInterface) {
         const checkValidation = this.checkValidation();
         if(checkValidation.isValid) {
             return await axios({
                 method: 'post',
-                url: `${API_URL}/api/create/team`,
+                url: `${API_URL}/api/update/team`,
                 data: {
+                    id: this.input?.id,
                     name: this.input?.name,
                     country: this.input?.country,
                     balance: typeof this.input?.balance !== 'number' ? parseInt(this.input?.balance as any) : this.input?.balance,
@@ -69,9 +70,10 @@ export class AddTeamService {
                 }
             })
             .then((result) => {
+                
                 return {
                     success: true,
-                    message: "Equipe ajouté."
+                    message: "Equipe modifié."
                 }
             })
             .catch((error) => {

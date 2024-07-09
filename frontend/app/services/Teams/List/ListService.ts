@@ -37,4 +37,35 @@ export class ListTeamsService {
         });
     }
 
+    async getOneTeamsById(id: string, accessToken: string) {
+        return axios({
+            method: 'get',
+            url: `${API_URL}/api/team`,
+            data: {
+                id
+            },
+            headers: {
+                Authorization: 'Bearer ' + accessToken
+            }
+        })
+        .then((result) => {
+            return {
+                message: '',
+                data: {
+                    id: result.data.data.id,
+                    balance: result.data.data.balance,
+                    country: result.data.data.country,
+                    image: result.data.data.image,
+                    name: result.data.data.name
+                }
+            }
+        })
+        .catch((error) => {
+            return {
+                message: 'Une erreur est survenue lors de recuperation des donnees',
+                data: undefined
+            }
+        });
+    }
+
 }

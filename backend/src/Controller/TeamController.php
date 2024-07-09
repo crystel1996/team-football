@@ -67,6 +67,87 @@ class TeamController extends AbstractController {
 
     }
 
+    #[Route('/api/update/team')]
+    public function updateTeam(
+        Request $request,
+        ValidatorInterface $validator,
+        TeamRepository $teamRepository
+    ) 
+    {   
+       
+        $token = $request->headers->get('Authorization');
+        $decoded = $this->jwtStrategy->isValidToken($token);
+        
+        if($decoded->getStatusCode() !== Response::HTTP_OK) {
+            return $decoded;
+        }
+    
+        $payload = json_decode($request->getContent(), false);
+
+        $team = $teamRepository->findOneBy(['id' => $payload->id]);
+
+        if(!$team) {
+            return new JsonResponse('Equipe introuvable', Response::HTTP_BAD_REQUEST);
+        }
+
+        $team->setName($payload->name);
+        $team->setCountry($payload->country);
+        $team->setBalance($payload->balance);
+        $team->setImage($payload->image);
+        $team->setSlug(str_replace(' ', '-', strtolower($payload->name)));
+
+        $errors = $validator->validate($team);
+
+        if (count($errors) > 0) {
+            
+            $errorsString = (string) $errors;
+    
+            return new Response($errorsString, Response::HTTP_BAD_REQUEST);
+        }
+
+        $teamCreated = $teamRepository->save($team);
+        
+        return new JsonResponse([
+            
+            "team" => $teamCreated->getId()
+        
+        ]);
+       
+
+    }
+
+    #[Route('/api/team')]
+    public function team(
+        Request $request, 
+        TeamRepository $teamRepository,
+        SerializerInterface $serializer
+    )
+    {
+        $token = $request->headers->get('Authorization');
+        $decoded = $this->jwtStrategy->isValidToken($token);
+        
+        if($decoded->getStatusCode() !== Response::HTTP_OK) {
+            return $decoded;
+        }
+
+        $payload = json_decode($request->getContent(), false);
+
+        $team = $teamRepository->findOneBy(['id' => $payload->id]);
+
+        if(!$team) {
+            return new JsonResponse('Equipe introuvable', Response::HTTP_BAD_REQUEST);
+        }
+
+        $data = $serializer->serialize($team, 'json', ['groups' => 'list_team:read']);
+
+        return $this->json([
+            "data" => json_decode($data)
+        ], 
+            Response::HTTP_OK
+        );
+
+    }
+
     #[Route('/api/list-team/{page}', name: 'list_team', requirements: ['page' => '\d+'])]
     public function list(
         int $page, 

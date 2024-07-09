@@ -76,7 +76,7 @@ export const List: FC<ListComponentInterface> = (props) => {
                                     )}
                                     {props.withAction && (
                                         <div className="py-1"> 
-                                            <a href={`${props.path}/update/${item.id}`} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white ">Modifier</a>
+                                            <a href={`${props.path}/${item.id}`} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white ">Modifier</a>
                                             <span onClick={(event) => handleDelete(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Supprimer</span>    
                                         </div>
                                     )}

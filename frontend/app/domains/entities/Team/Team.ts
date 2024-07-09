@@ -4,5 +4,5 @@ export interface TeamEntity {
     country: string;
     balance: number;
     image: string;
-    link: string;
+    link?: string;
 }

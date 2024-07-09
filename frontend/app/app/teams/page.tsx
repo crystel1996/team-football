@@ -71,7 +71,7 @@ export default async function TeamsPage({
           <div className="teams-content py-3 w-screen">
             <ListWithAction
               items={teams.listTeams.data} 
-              path='/teams'
+              path='/teams/update'
               withAction
               accessToken={teams.accessToken}
             />
