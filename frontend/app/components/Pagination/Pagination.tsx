@@ -1,3 +1,4 @@
+'use client'
 import { FC, useMemo } from "react";
 import { PaginationComponentInterface } from "./interface";
 
@@ -30,12 +31,12 @@ export const Pagination: FC<PaginationComponentInterface> = (props) => {
             </li>
             {list}
             <li>
-            {props.nextDisabled ? 
-                <span className={`px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 cursor-not-allowed`}>Suivant</span>
-            : 
-                <a href={`${props.path}?p=${endPage + 1}`} className={`px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700`}>Suivant</a>
-            }
-        </li>
+                {props.nextDisabled ? 
+                    <span className={`px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 cursor-not-allowed`}>Suivant</span>
+                : 
+                    <a href={`${props.path}?p=${endPage + 1}`} className={`px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700`}>Suivant</a>
+                }
+            </li>
         </>
     }, [props.currentPage, props.totalPage, props.nextDisabled, props.previousDisabled, props.path, props.totalPage]);
 

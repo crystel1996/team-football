@@ -1,4 +1,5 @@
 export interface ListItemInterface {
+    id: string;
     name: string;
     image?: string;
     link?: string;
@@ -6,4 +7,14 @@ export interface ListItemInterface {
 }
 export interface ListComponentInterface {
     items: ListItemInterface[];
+    withAction?: boolean;
+    path: string;
+    onDelete?: (id: string) => Promise<{
+        success: boolean;
+        message: string;
+    }>;
+}
+
+export interface ListWithActionInterface extends ListComponentInterface {
+    accessToken: string;
 }
