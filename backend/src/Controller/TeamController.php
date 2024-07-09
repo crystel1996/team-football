@@ -99,6 +99,34 @@ class TeamController extends AbstractController {
 
     }
 
+    #[Route('/api/delete-team', name: 'delete_team')]
+    public function deleteTeam(
+        Request $request,
+        TeamRepository $teamRepository
+    ) 
+    {
+
+        $token = $request->headers->get('Authorization');
+        $decoded = $this->jwtStrategy->isValidToken($token);
+        
+        if($decoded->getStatusCode() !== Response::HTTP_OK) {
+            return $decoded;
+        }
+
+        $payload = json_decode($request->getContent(), false);
+
+        $team = $teamRepository->findOneBy(['id' => $payload->id]);
+
+        if (!$team) {
+            return new JsonResponse('Equipe introuvable!', Response::HTTP_BAD_REQUEST);
+        }
+
+        $teamRepository->remove($team);
+
+        return new JsonResponse('Supression reussi', Response::HTTP_OK);
+
+    }
+
 }
 
 ?>

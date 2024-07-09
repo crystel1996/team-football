@@ -27,6 +27,16 @@ class TeamRepository extends ServiceEntityRepository
     }
 
     /**
+        * @return Team Returns an Team
+    */
+    public function remove(Team $team) 
+    {
+        $this->getEntityManager()->remove($team);
+        $this->getEntityManager()->flush();
+        return $team;
+    }
+
+    /**
     * @return Team[] Returns an array of Team objects
     */
     public function findAllTeam(Int $page): array

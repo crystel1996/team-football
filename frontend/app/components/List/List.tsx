@@ -43,6 +43,7 @@ export const List: FC<ListComponentInterface> = (props) => {
                         id: '',
                         open: false
                     });
+                    window.location.reload();
                 }
                 if(!result.success) {
                     setError(result.message);
