@@ -22,8 +22,9 @@ export default async function PlayersPage() {
 
     const players = await getData();
 
-    const listPlayers: ListItemInterface[] = players.map((player) => {
+    const listPlayers: ListItemInterface[] = players.map((player, index) => {
       return {
+        id: `player-${index}`,
         name: `${player.firstName} ${player.lastName}`,
         image: player.image,
         link: `players/${player.firstName}-${player.lastName}-${player.id}`
@@ -36,7 +37,7 @@ export default async function PlayersPage() {
         <div className="grid place-items-center h-screen w-screen min-[992px]:w-600">
           <Title title="Liste des joueurs" subtitleLink={{ link: "/players/add", title:"Ajouter" }} />
           <div className="players-content py-3">
-            <List items={listPlayers} />
+            <List items={listPlayers} path='/players' />
           </div>
         </div>
       </>
