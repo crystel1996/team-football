@@ -16,7 +16,7 @@ export const Pagination: FC<PaginationComponentInterface> = (props) => {
         const list = [...Array(5)].map((_, index) => {
             const pageNumber = startPage + index;
             const isActive = pageNumber === props.currentPage;
-            return  <li>
+            return  <li key={`${props.path}?p=${pageNumber}`}>
                         <a href={`${props.path}?p=${pageNumber}`} className={isActive? classNameItemActive : classNameItem}>{pageNumber}</a>
                     </li>
         });
