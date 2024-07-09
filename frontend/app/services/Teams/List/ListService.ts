@@ -24,13 +24,15 @@ export class ListTeamsService {
                         subtitle: `Balance: ${team.balance}$`,
                         slug: undefined,
                     }
-                })
+                }),
+                count: result.data.count
             }
         })
         .catch((error) => {
             return {
                 message: 'Une erreur est survenue lors de recuperation des donnees',
-                data: []
+                data: [],
+                count: 0
             }
         });
     }

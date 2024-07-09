@@ -1,5 +1,6 @@
 import { List } from "@team-football/components/List";
 import { MeComponent } from "@team-football/components/Me";
+import { Pagination } from "@team-football/components/Pagination";
 import { Title } from "@team-football/components/Title";
 import { ListTeamsService } from "@team-football/services/Teams/List";
 import { cookies } from "next/headers";
@@ -9,11 +10,11 @@ async function getData({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-
+  const page = searchParams.p && typeof searchParams.p === 'string' ? parseInt(searchParams.p) : 1;
   const handleListTeams = async () => {
     const teams = new ListTeamsService();
    
-    const page = searchParams.p && typeof searchParams.p === 'string' ? parseInt(searchParams.p) : 1
+   
     const result = await teams.getListTeams({
       page: page ?? 1,
       accessToken: cookies().get('accessToken')?.value ?? ''
@@ -26,8 +27,26 @@ async function getData({
     await handleListTeams()
   ]);
 
+  const previousDisabled = () => {
+    
+    if (page === 1) {
+      return true;
+    }
+    return false;
+  }
+
+  const nextDisabled = () => {
+    if(page === listTeams.count || listTeams.count <= 5) {
+      return true;
+    }
+    return false;
+  };
+
   return {
-    listTeams
+    listTeams,
+    previousDisabled: previousDisabled(),
+    nextDisabled: nextDisabled(),
+    currentPage: page
   };
 
 }
@@ -43,6 +62,8 @@ export default async function TeamsPage({
       searchParams
     });
 
+    console.log('[]', teams.listTeams)
+
     return (
       <>
         <MeComponent />
@@ -50,6 +71,15 @@ export default async function TeamsPage({
           <Title title="Liste des équipes" subtitleLink={{ link: "/teams/add", title:"Ajouter" }} />
           <div className="teams-content py-3 w-screen">
             <List items={teams.listTeams.data} />
+            {teams.listTeams.count > 5 && (
+              <Pagination 
+                previousDisabled={teams.previousDisabled}
+                nextDisabled={teams.nextDisabled}
+                currentPage={teams.currentPage}
+                totalPage={teams.listTeams.count}
+                path="/teams"
+              />
+            )}
           </div>
         </div>
       </>
