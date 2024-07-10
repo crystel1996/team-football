@@ -20,7 +20,7 @@ export class ListTeamsService {
                 data: (result.data.data || []).map((team: any) => {
                     return {
                         ...team,
-                        link: `/teams/${team.slug}`,
+                        link: `/teams/${team.id}`,
                         subtitle: `Balance: ${team.balance}$`,
                         slug: undefined,
                     }
