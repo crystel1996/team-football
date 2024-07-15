@@ -1,7 +1,7 @@
 'use server';
-import { AddTeams } from "@team-football/components/Forms";
+import { AddPlayers } from "@team-football/components/Forms/AddPlayer";
 import { MeComponent } from "@team-football/components/Me";
-import { AddTeamService } from "@team-football/services/Teams/Add";
+import { AddPlayerService } from "@team-football/services/Player/Add";
 import { cookies } from "next/headers";
 
 const getData = async () => {
@@ -10,9 +10,9 @@ const getData = async () => {
     "use server";
     const inputAsObject = JSON.parse(input);
     
-    const addTeamService = new AddTeamService(inputAsObject);
+    const addPlayerService = new AddPlayerService(inputAsObject);
     
-    const result = await addTeamService.submit({
+    const result = await addPlayerService.submit({
       accessToken: cookies().get('accessToken')?.value ?? ''
     });
     return result;
@@ -29,7 +29,7 @@ export default async function Add() {
     return (
       <>
         <MeComponent />
-        <AddTeams onSubmit={props.submit} />
+        <AddPlayers onSubmit={props.submit} />
       </>
     );
   }

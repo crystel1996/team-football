@@ -1,12 +1,15 @@
 import { MeComponent } from "@team-football/components/Me";
+import TeamsPage from "./teams/page";
 
-export default function Home() {
+export default function Home({
+  searchParams
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
   return (
     <>
       <MeComponent />
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
+      <TeamsPage searchParams={searchParams} withHeader={false}/>
     </>
   );
 }

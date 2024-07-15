@@ -1,12 +1,19 @@
 import { CardWithAction } from "@team-football/components/Card/CardWithAction";
+import { ListWithAction } from "@team-football/components/List";
 import { MeComponent } from "@team-football/components/Me";
+import { Pagination } from "@team-football/components/Pagination";
 import { Title } from "@team-football/components/Title";
 import { ListTeamsService } from "@team-football/services/Teams/List";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-async function getData() {
+async function getData({
+  searchParams
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
 
+  const page = searchParams.p && typeof searchParams.p === 'string' ? parseInt(searchParams.p) : 1;
   const token  = cookies().get('accessToken')?.value ?? '';
 
   const handleGetTeam = async () => {
@@ -28,20 +35,46 @@ async function getData() {
     await handleGetTeam()
   ]);
 
+  
+  const previousDisabled = () => {
+    
+    if (page === 1) {
+      return true;
+    }
+    return false;
+  }
+
+  const nextDisabled = () => {
+    if(page === team.data.players.count || team.data.players.count <= 5) {
+      return true;
+    }
+    return false;
+  };
+
   return {
+    previousDisabled: previousDisabled(),
+    nextDisabled: nextDisabled(),
+    currentPage: page,
     team,
     accessToken: token
   }
+  
 
 }
 
-export default async function TeamsPage() {
+export default async function TeamsPage({
+  searchParams
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
 
 
-    const props = await getData();
+    const props = await getData({
+      searchParams
+    });
 
     const description = `${props.team.data?.name} est une équipe provenant à ${props.team.data?.country}. Son solde est: ${props.team.data?.balance ?? 0}$.`
-
+    console.log('[TEAM]', props.team.data.players)
     return (
       <>
         <MeComponent />
@@ -57,6 +90,24 @@ export default async function TeamsPage() {
               withAction
               link="/teams"
             />
+          </div>
+          <Title heading={2} title="Liste des joueurs" subtitleLink={{ link: "/player/add", title:'Ajouter un joeur' }}></Title>
+          <div className="teams-content py-3 w-screen">
+            <ListWithAction
+              items={props.team.data?.players} 
+              path='/teams/update'
+              withAction
+              accessToken={props.accessToken}
+            />
+            {(props.team.data?.players || []).count > 5 && (
+              <Pagination 
+                previousDisabled={props.previousDisabled}
+                nextDisabled={props.nextDisabled}
+                currentPage={props.currentPage}
+                totalPage={(props.team.data?.players || []).count}
+                path="/teams"
+              />
+            )}
           </div>
         </div>
       </>

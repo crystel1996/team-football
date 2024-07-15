@@ -21,33 +21,34 @@ class Team
     #[ORM\Column(name:"id", type: UuidType::NAME, unique:true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups("list_team:read")]
+    #[Groups(["list_team:read", "team:read"])]
     private ?string $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups("list_team:read")]
+    #[Groups(["list_team:read", "team:read"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups("list_team:read")]
+    #[Groups(["list_team:read", "team:read"])]
     private ?string $country = null;
 
     #[ORM\Column]
-    #[Groups("list_team:read")]
+    #[Groups(["list_team:read", "team:read"])]
     private ?float $balance = null;
 
     /**
      * @var Collection<int, Player>
      */
     #[ORM\OneToMany(targetEntity: Player::class, mappedBy: 'idTeam')]
+    #[Groups("team:read")]
     private Collection $players;
 
     #[ORM\Column(length: 255)]
-    #[Groups("list_team:read")]
+    #[Groups(["list_team:read", "team:read"])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups("list_team:read")]
+    #[Groups(["list_team:read", "team:read"])]
     private ?string $image = null;
 
     public function __construct()

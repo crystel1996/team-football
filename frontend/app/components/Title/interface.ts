@@ -5,6 +5,7 @@ export interface SubtitleLinkInterface {
 
 export interface TitleComponentInterface {
     title: string;
+    heading?: number;
     subtitleLink?: SubtitleLinkInterface;
     subtitle?: string;
 }

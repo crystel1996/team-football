@@ -56,7 +56,8 @@ export class ListTeamsService {
                     balance: result.data.data.balance,
                     country: result.data.data.country,
                     image: result.data.data.image,
-                    name: result.data.data.name
+                    name: result.data.data.name,
+                    players: []
                 }
             }
         })

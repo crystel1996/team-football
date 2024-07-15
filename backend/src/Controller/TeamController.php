@@ -138,7 +138,7 @@ class TeamController extends AbstractController {
             return new JsonResponse('Equipe introuvable', Response::HTTP_BAD_REQUEST);
         }
 
-        $data = $serializer->serialize($team, 'json', ['groups' => 'list_team:read']);
+        $data = $serializer->serialize($team, 'json', ['groups' => 'team:read']);
 
         return $this->json([
             "data" => json_decode($data)

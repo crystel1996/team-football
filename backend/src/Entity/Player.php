@@ -29,6 +29,9 @@ class Player
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $idTeam = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $position = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,6 +81,18 @@ class Player
     public function setIdTeam(?Team $idTeam): static
     {
         $this->idTeam = $idTeam;
+
+        return $this;
+    }
+
+    public function getPosition(): ?string
+    {
+        return $this->position;
+    }
+
+    public function setPosition(string $position): static
+    {
+        $this->position = $position;
 
         return $this;
     }
