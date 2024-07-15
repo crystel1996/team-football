@@ -60,7 +60,7 @@ export class AddPlayerService {
                 data: {
                     firstName: this.input?.firstName,
                     lastName: this.input?.lastName,
-                    price: typeof this.input?.balance !== 'number' ? parseInt(this.input?.balance as any) : this.input?.balance,
+                    balance: typeof this.input?.balance !== 'number' ? parseInt(this.input?.balance as any) : this.input?.balance,
                     position: this.input?.position
                 },
                 headers: {

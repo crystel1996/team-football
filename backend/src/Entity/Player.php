@@ -5,7 +5,10 @@ namespace App\Entity;
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
 class Player
@@ -14,25 +17,29 @@ class Player
     #[ORM\Column(name:"id", type: UuidType::NAME, unique:true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(["team:read"])]
     private ?string $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["team:read"])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["team:read"])]
     private ?string $lastName = null;
 
     #[ORM\Column]
+    #[Groups(["team:read"])]
     private ?float $balance = null;
 
     #[ORM\ManyToOne(inversedBy: 'players')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Team $idTeam = null;
 
     #[ORM\Column(length: 255)]
     private ?string $position = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -95,6 +102,11 @@ class Player
         $this->position = $position;
 
         return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('idTeam', new NotNull());
     }
 
 }

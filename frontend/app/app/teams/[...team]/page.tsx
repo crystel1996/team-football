@@ -1,7 +1,6 @@
 import { CardWithAction } from "@team-football/components/Card/CardWithAction";
-import { ListWithAction } from "@team-football/components/List";
+import { ListItemInterface, ListPlayersWithAction } from "@team-football/components/List";
 import { MeComponent } from "@team-football/components/Me";
-import { Pagination } from "@team-football/components/Pagination";
 import { Title } from "@team-football/components/Title";
 import { ListTeamsService } from "@team-football/services/Teams/List";
 import { cookies, headers } from "next/headers";
@@ -74,7 +73,15 @@ export default async function TeamsPage({
     });
 
     const description = `${props.team.data?.name} est une équipe provenant à ${props.team.data?.country}. Son solde est: ${props.team.data?.balance ?? 0}$.`
-    console.log('[TEAM]', props.team.data.players)
+    
+    const playerItems: ListItemInterface[] = (props.team.data.players || []).map((player: any) => {
+      return {
+        name: `${player.firstName} ${player.lastName}`,
+        subtitle: `Solde: ${player.balance}$`,
+        id: player.id
+      }
+    });
+
     return (
       <>
         <MeComponent />
@@ -91,23 +98,14 @@ export default async function TeamsPage({
               link="/teams"
             />
           </div>
-          <Title heading={2} title="Liste des joueurs" subtitleLink={{ link: "/player/add", title:'Ajouter un joeur' }}></Title>
+          <Title heading={2} title="Liste des joueurs" subtitleLink={{ link: "/players/add", title:'Ajouter un joueur' }}></Title>
           <div className="teams-content py-3 w-screen">
-            <ListWithAction
-              items={props.team.data?.players} 
-              path='/teams/update'
+            <ListPlayersWithAction
+              items={playerItems} 
+              path='/players/update'
               withAction
               accessToken={props.accessToken}
             />
-            {(props.team.data?.players || []).count > 5 && (
-              <Pagination 
-                previousDisabled={props.previousDisabled}
-                nextDisabled={props.nextDisabled}
-                currentPage={props.currentPage}
-                totalPage={(props.team.data?.players || []).count}
-                path="/teams"
-              />
-            )}
           </div>
         </div>
       </>

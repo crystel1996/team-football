@@ -21,7 +21,7 @@ export class ListTeamsService {
                     return {
                         ...team,
                         link: `/teams/${team.id}`,
-                        subtitle: `Balance: ${team.balance}$`,
+                        subtitle: `Solde: ${team.balance}$`,
                         slug: undefined,
                     }
                 }),
@@ -57,7 +57,7 @@ export class ListTeamsService {
                     country: result.data.data.country,
                     image: result.data.data.image,
                     name: result.data.data.name,
-                    players: []
+                    players: result.data.data.players as any
                 }
             }
         })

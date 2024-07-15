@@ -1,4 +1,4 @@
-import { ListWithAction } from "@team-football/components/List";
+import { ListTeamsWithAction } from "@team-football/components/List";
 import { MeComponent } from "@team-football/components/Me";
 import { Pagination } from "@team-football/components/Pagination";
 import { Title } from "@team-football/components/Title";
@@ -71,7 +71,7 @@ export default async function TeamsPage({
         <div className="grid place-items-center h-screen w-screen min-[992px]:w-600">
           <Title title="Liste des équipes" subtitleLink={{ link: "/teams/add", title:"Ajouter" }} />
           <div className="teams-content py-3 w-screen">
-            <ListWithAction
+            <ListTeamsWithAction
               items={teams.listTeams.data} 
               path='/teams/update'
               withAction

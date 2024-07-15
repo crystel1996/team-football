@@ -16,6 +16,25 @@ class PlayerRepository extends ServiceEntityRepository
         parent::__construct($registry, Player::class);
     }
 
+    /**
+        * @return Player Returns an Team
+    */
+    public function save(Player $player) 
+    {
+        $this->getEntityManager()->persist($player);
+        $this->getEntityManager()->flush();
+        return $player;
+    }
+
+    public function updateTeam(Array $players, String $idTeam = null)
+    {
+        foreach($players as $player) {
+            $player->setIdTeam($idTeam);
+            $this->getEntityManager()->persist($player);
+        }
+        $this->getEntityManager()->flush();
+    }
+
     //    /**
     //     * @return Player[] Returns an array of Player objects
     //     */

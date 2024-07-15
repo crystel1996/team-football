@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Team;
+use App\Repository\PlayerRepository;
 use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -183,7 +184,8 @@ class TeamController extends AbstractController {
     #[Route('/api/delete-team', name: 'delete_team')]
     public function deleteTeam(
         Request $request,
-        TeamRepository $teamRepository
+        TeamRepository $teamRepository,
+        PlayerRepository $playerRepository
     ) 
     {
 
@@ -200,6 +202,12 @@ class TeamController extends AbstractController {
 
         if (!$team) {
             return new JsonResponse('Equipe introuvable!', Response::HTTP_BAD_REQUEST);
+        }
+
+        $players = $playerRepository->findBy(['idTeam' => $payload->id]);
+
+        if(count($players) > 0) {
+            $playerRepository->updateTeam($players);
         }
 
         $teamRepository->remove($team);

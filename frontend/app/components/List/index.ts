@@ -1,3 +1,4 @@
 export * from './List';
-export * from './ListWithAction'
+export * from './ListTeamsWithAction';
+export * from './ListPlayersWithAction';
 export * from './interface';
