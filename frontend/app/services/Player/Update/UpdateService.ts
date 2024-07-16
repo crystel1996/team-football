@@ -1,13 +1,13 @@
 import axios from "axios";
-import { UpdateTeamsInputInterface, UpdateTeamsSubmitInterface } from "./interface";
+import { UpdatePlayersInputInterface, UpdatePlayersSubmitInterface } from "./interface";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export class UpdatePlayerService {
-    input: UpdateTeamsInputInterface | undefined;
+    input: UpdatePlayersInputInterface | undefined;
     accessToken: string | undefined | null;
 
-    constructor(input: UpdateTeamsInputInterface) {
+    constructor(input: UpdatePlayersInputInterface) {
         this.input = input;
     } 
 
@@ -22,12 +22,6 @@ export class UpdatePlayerService {
             return {
                 isValid: false,
                 message: "Veuillez ajouter un prenom."
-            }
-        }
-        if(!this.input?.idTeam) {
-            return {
-                isValid: false,
-                message: "Veuillez ajouter l'equipe."
             }
         }
 
@@ -51,18 +45,18 @@ export class UpdatePlayerService {
         }
     }
 
-    async submit(input: UpdateTeamsSubmitInterface) {
+    async submit(input: UpdatePlayersSubmitInterface) {
         const checkValidation = this.checkValidation();
         if(checkValidation.isValid) {
             return axios({
                 method: 'post',
                 url: `${API_URL}/api/update/player`,
                 data: {
+                    id: this.input?.id,
                     firstName: this.input?.firstName,
                     lastName: this.input?.lastName,
                     balance: typeof this.input?.balance !== 'number' ? parseInt(this.input?.balance as any) : this.input?.balance,
-                    position: this.input?.position,
-                    idTeam: this.input?.idTeam
+                    position: this.input?.position
                 },
                 headers: {
                     Authorization: 'Bearer ' +  input.accessToken

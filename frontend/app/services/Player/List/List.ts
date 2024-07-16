@@ -15,7 +15,6 @@ export class ListPlayerService {
             }
         })
         .then((result) => {
-            console.log('[RESULT]', result)
             return {
                 message: '',
                 data: {

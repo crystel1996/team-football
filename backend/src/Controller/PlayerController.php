@@ -133,7 +133,6 @@ class PlayerController extends AbstractController {
         $player->setFirstName($payload->firstName);
         $player->setLastName($payload->lastName);
         $player->setBalance($payload->balance);
-        $player->setIdTeam($payload->idTeam);
         $player->setPosition($payload->position);
 
         $errors = $validator->validate($player);
@@ -149,7 +148,7 @@ class PlayerController extends AbstractController {
         
         return new JsonResponse([
             
-            "team" => $playerUpdated->getId()
+            "id" => $playerUpdated->getId()
         
         ]);
        

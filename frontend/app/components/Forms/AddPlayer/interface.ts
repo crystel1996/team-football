@@ -10,4 +10,11 @@ export interface AddPlayerFormInterface {
 export interface AddPlayerInterface {
     accessToken: string;
     idTeam: string;
+    player?: any;
+}
+
+
+export interface UpdatePlayerInterface {
+    accessToken: string;
+    player?: any;
 }

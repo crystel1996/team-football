@@ -1,4 +1,4 @@
-export interface UpdateTeamsInputInterface {
+export interface UpdatePlayersInputInterface {
     id: string;
     lastName: string;
     firstName: string;
@@ -7,6 +7,6 @@ export interface UpdateTeamsInputInterface {
     idTeam: string;
 }
 
-export interface UpdateTeamsSubmitInterface {
-    accessToken: string
+export interface UpdatePlayersSubmitInterface {
+    accessToken: string;
 }

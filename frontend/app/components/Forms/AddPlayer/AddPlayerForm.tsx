@@ -19,7 +19,6 @@ export const AddPlayerForm: FC<AddPlayerFormInterface> = (props) => {
 
     useEffect(() => {
         if(props.player) {
-            console.log(props.player)
             setInput({
                 id: props.player.id,
                 lastName: props.player.lastName,

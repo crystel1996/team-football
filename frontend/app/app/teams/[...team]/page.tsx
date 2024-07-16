@@ -104,7 +104,7 @@ export default async function TeamsPage({
           <div className="teams-content py-3 w-screen">
             <ListPlayersWithAction
               items={playerItems} 
-              path='/players/update'
+              path={`/players/update/${props.team.data.id}`}
               withAction
               accessToken={props.accessToken}
               deleteSubtitle="Voulez-vous supprimer ce joueur?"
