@@ -1,1 +1,2 @@
-export * from './AddTeam'
+export * from './AddTeam';
+export * from './AddPlayer'

@@ -1,4 +1,4 @@
-import { AddTeams } from "@team-football/components/Forms";
+import { AddTeamForm } from "@team-football/components/Forms";
 import { MeComponent } from "@team-football/components/Me";
 import { ListTeamsService } from "@team-football/services/Teams/List";
 import { UpdateTeamService } from "@team-football/services/Teams/Update/UpdateService";
@@ -60,7 +60,7 @@ export default async function Update() {
     return (
         <>
           <MeComponent />
-          <AddTeams team={props.team.data} onSubmit={props.submit} />
+          <AddTeamForm team={props.team.data} onSubmit={props.submit} />
         </>
     );
 

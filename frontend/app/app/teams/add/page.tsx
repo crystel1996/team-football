@@ -1,35 +1,37 @@
 'use server';
-import { AddTeams } from "@team-football/components/Forms";
+import { AddTeam } from "@team-football/components/Forms/AddTeam";
 import { MeComponent } from "@team-football/components/Me";
-import { AddTeamService } from "@team-football/services/Teams/Add";
 import { cookies } from "next/headers";
 
-const getData = async () => {
+const getData = async ({
+  searchParams
+}:{
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
+  const idTeam = searchParams.t;
+  const accessToken = cookies().get('accessToken')?.value ?? ''
+  
 
-  const submit = async (input: string) => {
-    "use server";
-    const inputAsObject = JSON.parse(input);
-    
-    const addTeamService = new AddTeamService(inputAsObject);
-    
-    const result = await addTeamService.submit({
-      accessToken: cookies().get('accessToken')?.value ?? ''
-    });
-    return result;
-  }
   return {
-    submit
+    idTeam,
+    accessToken
   }
 }
 
-export default async function Add() {
+export default async function Add({
+  searchParams
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
 
-    const props = await getData();
+    const props = await getData({
+      searchParams
+    });
 
     return (
       <>
         <MeComponent />
-        <AddTeams onSubmit={props.submit} />
+        <AddTeam accessToken={props.accessToken} />
       </>
     );
   }

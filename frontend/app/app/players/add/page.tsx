@@ -1,5 +1,5 @@
 'use server';
-import { AddPlayer } from "@team-football/components/Forms/AddPlayer/AddPlayer";
+import { AddPlayer } from "@team-football/components/Forms/AddPlayer";
 import { MeComponent } from "@team-football/components/Me";
 import { cookies } from "next/headers";
 

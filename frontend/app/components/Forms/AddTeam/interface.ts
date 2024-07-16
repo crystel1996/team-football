@@ -8,3 +8,8 @@ export interface AddTeamsComponentInterface {
     }>;
     team?: TeamEntity;
 }
+
+export interface AddTeamsInterface {
+    accessToken: string;
+    team?: TeamEntity
+}

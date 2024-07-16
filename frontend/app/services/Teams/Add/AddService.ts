@@ -71,20 +71,25 @@ export class AddTeamService {
             .then((result) => {
                 return {
                     success: true,
-                    message: "Equipe ajouté."
+                    message: "Equipe ajouté.",
+                    data: {
+                        id: result.data.id
+                    }
                 }
             })
             .catch((error) => {
                 console.log('[ERROR]', error?.response?.data);
                 return {
                     success: false,
-                    message: error?.response?.data || 'Une erreur est survenue'
+                    message: error?.response?.data || 'Une erreur est survenue',
+                    data: undefined
                 }
             });
         } else {
             return {
                 success: false,
-                message: checkValidation.message
+                message: checkValidation.message,
+                data: undefined
             }
         }
     }
