@@ -16,7 +16,7 @@ export const AddTeam: FC<AddTeamsInterface> =(props)=> {
           accessToken: props.accessToken
         });
         if (result?.success) {
-          window.location.href = `/teams/${result.data?.id}`;
+          //window.location.href = `/teams/${result.data?.id}`;
         }
         return result;
     };

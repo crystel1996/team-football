@@ -5,6 +5,8 @@ export interface CardComponentInterface {
     link?: string;
     description: string;
     withAction?: boolean;
+    deleteTitle: string;
+    deleteSubtitle: string;
     onDelete?: (id: string) => Promise<{
         success: boolean;
         message: string;

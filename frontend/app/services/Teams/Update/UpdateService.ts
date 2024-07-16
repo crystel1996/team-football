@@ -73,20 +73,23 @@ export class UpdateTeamService {
                 
                 return {
                     success: true,
-                    message: "Equipe modifié."
+                    message: "Equipe modifié.",
+                    data: result.data
                 }
             })
             .catch((error) => {
                 console.log('[ERROR]', error?.response?.data);
                 return {
                     success: false,
-                    message: error?.response?.data || 'Une erreur est survenue'
+                    message: error?.response?.data || 'Une erreur est survenue',
+                    data: undefined
                 }
             });
         } else {
             return {
                 success: false,
-                message: checkValidation.message
+                message: checkValidation.message,
+                data: undefined
             }
         }
     }

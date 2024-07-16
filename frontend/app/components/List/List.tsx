@@ -91,8 +91,8 @@ export const List: FC<ListComponentInterface> = (props) => {
                 textCancel="Annuler"
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                title="Supprimer l'équipe"
-                content="Voulez-vous supprimer cette équipe?"
+                title={props.deleteTitle}
+                content={props.deleteSubtitle}
                 message={error}
             />
         )}

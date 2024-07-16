@@ -76,6 +76,8 @@ export default async function TeamsPage({
               path='/teams/update'
               withAction
               accessToken={teams.accessToken}
+              deleteTitle="Supprimer l'équipe"
+              deleteSubtitle="Voulez-vous supprimer cette équipe?"
             />
             {teams.listTeams.count > 5 && (
               <Pagination 

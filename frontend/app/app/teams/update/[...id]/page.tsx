@@ -20,7 +20,7 @@ const getData = async () => {
         });
 
         if(result.success) {
-            redirect('/teams');
+            redirect(`/teams/${(result.data as any)?.id}`);
         }
 
         return result;
@@ -35,7 +35,7 @@ const getData = async () => {
         const result = await teams.getOneTeamsById(paths[3],token);
 
         if(!result.data) {
-            redirect('/teams');
+            redirect(`/teams/`);
         }
 
         return result

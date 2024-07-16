@@ -96,6 +96,8 @@ export default async function TeamsPage({
               accessToken={props.accessToken}
               withAction
               link="/teams"
+              deleteTitle="Supprimer l'équipe"
+              deleteSubtitle="Voulez-vous supprimer cette équipe?"
             />
           </div>
           <Title heading={2} title="Liste des joueurs" subtitleLink={{ link: `/players/add?t=${props.team.data.id}`, title:'Ajouter un joueur' }}></Title>
@@ -105,6 +107,8 @@ export default async function TeamsPage({
               path='/players/update'
               withAction
               accessToken={props.accessToken}
+              deleteSubtitle="Voulez-vous supprimer ce joueur?"
+              deleteTitle="Supprimer le joueur"
             />
           </div>
         </div>
