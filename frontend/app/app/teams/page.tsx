@@ -54,10 +54,8 @@ async function getData({
 
 export default async function TeamsPage({
   searchParams,
-  withHeader = true
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
-  withHeader: boolean;
 }) {
 
 
@@ -67,7 +65,7 @@ export default async function TeamsPage({
 
     return (
       <>
-        {withHeader && <MeComponent />}
+        <MeComponent />
         <div className="grid place-items-center h-screen w-screen min-[992px]:w-600">
           <Title title="Liste des équipes" subtitleLink={{ link: "/teams/add", title:"Ajouter" }} />
           <div className="teams-content py-3 w-screen">
