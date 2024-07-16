@@ -17,19 +17,19 @@ export const AddPlayerForm: FC<AddPlayerFormInterface> = (props) => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
 
-    // useEffect(() => {
-    //     if(props.team) {
-    //         setInput({
-    //             id: props.team.id,
-    //             name: props.team.name,
-    //             country: props.team.country,
-    //             balance: props.team.balance,
-    //             image:{
-    //                 name: props.team.image
-    //             } as any
-    //         });
-    //     }
-    // }, [props.team]);
+    useEffect(() => {
+        if(props.player) {
+            console.log(props.player)
+            setInput({
+                id: props.player.id,
+                lastName: props.player.lastName,
+                firstName: props.player.firstName,
+                balance: props.player.balance,
+                position: props.player.position,
+                idTeam: props.player.idTeam
+            });
+        }
+    }, [props.player]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.stopPropagation();

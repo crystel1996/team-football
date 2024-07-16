@@ -37,6 +37,7 @@ class Player
     private ?Team $idTeam = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["team:read"])]
     private ?string $position = null;
 
     public function getId(): ?string

@@ -1,4 +1,5 @@
 export interface AddPlayerInputInterface {
+    id?: string;
     firstName: string;
     lastName: string;
     balance: number;
