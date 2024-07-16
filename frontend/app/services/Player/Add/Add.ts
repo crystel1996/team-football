@@ -54,14 +54,15 @@ export class AddPlayerService {
     async submit(input: AddPlayerSubmitInterface) {
         const checkValidation = this.checkValidation();
         if(checkValidation.isValid) {
-            return await axios({
+            return axios({
                 method: 'post',
                 url: `${API_URL}/api/create/player`,
                 data: {
                     firstName: this.input?.firstName,
                     lastName: this.input?.lastName,
                     balance: typeof this.input?.balance !== 'number' ? parseInt(this.input?.balance as any) : this.input?.balance,
-                    position: this.input?.position
+                    position: this.input?.position,
+                    idTeam: this.input?.idTeam
                 },
                 headers: {
                     Authorization: 'Bearer ' +  input.accessToken

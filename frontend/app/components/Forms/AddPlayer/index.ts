@@ -1,2 +1,2 @@
-export * from './AddPlayer';
+export * from './AddPlayerForm';
 export * from './interface';

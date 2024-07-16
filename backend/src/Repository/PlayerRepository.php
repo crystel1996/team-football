@@ -26,6 +26,10 @@ class PlayerRepository extends ServiceEntityRepository
         return $player;
     }
 
+    
+    /**
+        * @return void 
+    */
     public function updateTeam(Array $players, String $idTeam = null)
     {
         foreach($players as $player) {
@@ -33,6 +37,16 @@ class PlayerRepository extends ServiceEntityRepository
             $this->getEntityManager()->persist($player);
         }
         $this->getEntityManager()->flush();
+    }
+
+    /**
+        * @return Player Returns an Player
+    */
+    public function remove(Player $player) 
+    {
+        $this->getEntityManager()->remove($player);
+        $this->getEntityManager()->flush();
+        return $player;
     }
 
     //    /**

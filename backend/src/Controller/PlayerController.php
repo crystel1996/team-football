@@ -73,6 +73,33 @@ class PlayerController extends AbstractController {
 
     }
 
+    #[Route('/api/delete-player')]
+    public function deletePlayer(
+        Request $request,
+        PlayerRepository $playerRepository
+    )
+    {
+        $token = $request->headers->get('Authorization');
+        $decoded = $this->jwtStrategy->isValidToken($token);
+        
+        if($decoded->getStatusCode() !== Response::HTTP_OK) {
+            return $decoded;
+        }
+
+        $payload = json_decode($request->getContent(), false);
+
+        $player = $playerRepository->findOneBy(['id' => $payload->id]);
+
+        if (!$player) {
+            return new JsonResponse('Joueur introuvable!', Response::HTTP_BAD_REQUEST);
+        }
+
+        $playerRepository->remove($player);
+
+        return new JsonResponse('Supression reussi', Response::HTTP_OK);
+
+    }
+
 }
 
 ?>

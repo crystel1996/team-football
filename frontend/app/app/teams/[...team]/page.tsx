@@ -98,7 +98,7 @@ export default async function TeamsPage({
               link="/teams"
             />
           </div>
-          <Title heading={2} title="Liste des joueurs" subtitleLink={{ link: "/players/add", title:'Ajouter un joueur' }}></Title>
+          <Title heading={2} title="Liste des joueurs" subtitleLink={{ link: `/players/add?t=${props.team.data.id}`, title:'Ajouter un joueur' }}></Title>
           <div className="teams-content py-3 w-screen">
             <ListPlayersWithAction
               items={playerItems} 
