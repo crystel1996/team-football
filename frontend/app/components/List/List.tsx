@@ -11,6 +11,13 @@ export const List: FC<ListComponentInterface> = (props) => {
         id: '',
         open: false
     });
+    const [openConfirmSell, setOpenConfirmSell] = useState<{
+        id: string;
+        open: boolean;
+    }>({
+        id: '',
+        open: false
+    });
     const [error, setError] = useState<string | undefined>(undefined);
 
     useEffect(() => {
@@ -52,6 +59,39 @@ export const List: FC<ListComponentInterface> = (props) => {
         }
     };
 
+    const handleSell = (event: MouseEvent<HTMLElement>, id: string) => {
+        event.stopPropagation();
+        setOpenConfirmSell({
+            id,
+            open: true
+        });
+    };
+
+    const handleCancelSell = () => {
+        setOpenConfirmSell({
+            id: '',
+            open: false
+        });
+    };
+
+    const handleConfirmSell = async () => {
+        if(openConfirmSell.id && openConfirmSell.open) {
+            if (props.onSell) {
+                const result = await props.onSell(openConfirmSell.id);
+                if(result.success) {
+                    setOpenConfirmSell({
+                        id: '',
+                        open: false
+                    });
+                    window.location.reload();
+                }
+                if(!result.success) {
+                    setError(result.message);
+                }
+            }
+        }
+    };
+
     return <>
         <ul role="list" className="grid gap-4 grid-cols-3 max-[600px]:grid-cols-2 grid-rows-3 max-[600px]:grid-rows-2">
             {(props.items || []).map((item) => {
@@ -75,7 +115,10 @@ export const List: FC<ListComponentInterface> = (props) => {
                                         </div>
                                     )}
                                     {props.withAction && (
-                                        <div className="py-1"> 
+                                        <div className="py-1">
+                                            {props.withTransaction && (
+                                                <span onClick={(event) => handleSell(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Vendre</span> 
+                                            )}
                                             <a href={`${props.path}/${item.id}`} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white ">Modifier</a>
                                             <span onClick={(event) => handleDelete(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Supprimer</span>    
                                         </div>
@@ -93,6 +136,17 @@ export const List: FC<ListComponentInterface> = (props) => {
                 onConfirm={handleConfirm}
                 title={props.deleteTitle}
                 content={props.deleteSubtitle}
+                message={error}
+            />
+        )}
+        {openConfirmSell.id && openConfirmSell.open && (
+            <Modal
+                textConfirm="Supprimer"
+                textCancel="Annuler"
+                onCancel={handleCancelSell}
+                onConfirm={handleConfirmSell}
+                title={props.sellOptions?.sellTitle || ''}
+                content={props.sellOptions?.sellSubtitle || ''}
                 message={error}
             />
         )}

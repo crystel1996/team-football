@@ -106,9 +106,14 @@ export default async function TeamsPage({
               items={playerItems} 
               path={`/players/update/${props.team.data.id}`}
               withAction
+              withTransaction
               accessToken={props.accessToken}
               deleteSubtitle="Voulez-vous supprimer ce joueur?"
               deleteTitle="Supprimer le joueur"
+              sellOptions={{
+                sellSubtitle: "Voulez-vous vendre ce joueur?",
+                sellTitle: "Vente du joueur"
+              }}
             />
           </div>
         </div>
