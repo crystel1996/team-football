@@ -78,7 +78,8 @@ export default async function TeamsPage({
       return {
         name: `${player.firstName} ${player.lastName}`,
         subtitle: `Solde: ${player.balance}$`,
-        id: player.id
+        id: player.id,
+        isAwaitingBuyer: player.isAwaitingBuyer
       }
     });
 

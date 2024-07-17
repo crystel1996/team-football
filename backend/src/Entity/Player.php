@@ -40,6 +40,10 @@ class Player
     #[Groups(["team:read"])]
     private ?string $position = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(["team:read"])]
+    private ?bool $isAwaitingBuyer = null;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -108,6 +112,18 @@ class Player
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
         $metadata->addPropertyConstraint('idTeam', new NotNull());
+    }
+
+    public function isAwaitingBuyer(): ?bool
+    {
+        return $this->isAwaitingBuyer;
+    }
+
+    public function setAwaitingBuyer(?bool $isAwaitingBuyer): static
+    {
+        $this->isAwaitingBuyer = $isAwaitingBuyer;
+
+        return $this;
     }
 
 }

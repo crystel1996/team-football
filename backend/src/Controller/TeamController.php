@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Team;
 use App\Repository\PlayerRepository;
+use App\Repository\PlayerTransactionRepository;
 use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -154,6 +155,7 @@ class TeamController extends AbstractController {
         int $page, 
         Request $request, 
         TeamRepository $teamRepository,
+        PlayerTransactionRepository $playerTransactionRepository,
         SerializerInterface $serializer
     )
     {
@@ -170,10 +172,10 @@ class TeamController extends AbstractController {
 
         $teams = $teamRepository->findAllTeam($page);
 
-        $data = $serializer->serialize($teams, 'json', ['groups' => 'list_team:read']);
+        $data = json_decode($serializer->serialize($teams, 'json', ['groups' => 'list_team:read']));
 
         return $this->json([
-            "data" => json_decode($data),
+            "data" => $data,
             "count" => $teamRepository->count()
         ], 
             Response::HTTP_OK

@@ -70,6 +70,8 @@ class PlayerTransactionController extends AbstractController
         }
 
         $playerTransactionCreated = $playerTransactionRepository->save($playerTransaction);
+        $player->setAwaitingBuyer(true);
+        $playerRepository->save($player);
 
         return new JsonResponse([
             
