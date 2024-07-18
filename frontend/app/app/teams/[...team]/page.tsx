@@ -2,6 +2,7 @@ import { CardWithAction } from "@team-football/components/Card/CardWithAction";
 import { ListItemInterface, ListPlayersWithAction } from "@team-football/components/List";
 import { MeComponent } from "@team-football/components/Me";
 import { Title } from "@team-football/components/Title";
+import { PlayerTransactionService } from "@team-football/services/PlayerTransaction";
 import { ListTeamsService } from "@team-football/services/Teams/List";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -30,8 +31,23 @@ async function getData({
     return result
     
   };
-  const [team] = await Promise.all([
-    await handleGetTeam()
+
+  const handleGetPlayerToSell = async () => {
+    const playerTransaction = new PlayerTransactionService();
+    const headerList = headers();
+    const pathname = headerList.get("x-current-path");
+    const paths = (pathname || '').split('/');
+
+    const result = await playerTransaction.listSellPlayer({
+      idTeam: paths[2],
+      accessToken: token
+    });
+    return result;
+  }
+
+  const [team, playerToSell] = await Promise.all([
+    await handleGetTeam(),
+    await handleGetPlayerToSell()
   ]);
 
   
@@ -55,6 +71,7 @@ async function getData({
     nextDisabled: nextDisabled(),
     currentPage: page,
     team,
+    playerToSell,
     accessToken: token
   }
   
@@ -83,6 +100,14 @@ export default async function TeamsPage({
       }
     });
 
+    const playerToSellItems: ListItemInterface[] = (props.playerToSell.data || []).map((player: any) => {
+      return {
+        name: `${player.firstName} ${player.lastName}`,
+        subtitle: `Solde: ${player.balance}$`,
+        id: player.id,
+      }
+    });
+
     return (
       <>
         <MeComponent />
@@ -101,22 +126,40 @@ export default async function TeamsPage({
               deleteSubtitle="Voulez-vous supprimer cette équipe?"
             />
           </div>
-          <Title heading={2} title="Liste des joueurs" subtitleLink={{ link: `/players/add?t=${props.team.data.id}`, title:'Ajouter un joueur' }}></Title>
-          <div className="teams-content py-3 w-screen">
-            <ListPlayersWithAction
-              items={playerItems} 
-              path={`/players/update/${props.team.data.id}`}
-              withAction
-              withTransaction
-              accessToken={props.accessToken}
-              deleteSubtitle="Voulez-vous supprimer ce joueur?"
-              deleteTitle="Supprimer le joueur"
-              sellOptions={{
-                sellSubtitle: "Voulez-vous vendre ce joueur?",
-                sellTitle: "Vente du joueur"
-              }}
-            />
-          </div>
+          
+            
+              <Title heading={2} title="Liste des joueurs" subtitleLink={{ link: `/players/add?t=${props.team.data.id}`, title:'Ajouter un joueur' }}></Title>
+              <div className="teams-content py-3 h-fit">
+                <ListPlayersWithAction
+                  items={playerItems} 
+                  path={`/players/update/${props.team.data.id}`}
+                  withAction
+                  withUpdate
+                  withTransaction
+                  accessToken={props.accessToken}
+                  deleteSubtitle="Voulez-vous supprimer ce joueur?"
+                  deleteTitle="Supprimer le joueur"
+                  sellOptions={{
+                    sellSubtitle: "Voulez-vous vendre ce joueur?",
+                    sellTitle: "Vente du joueur"
+                  }}
+                />
+              </div>
+            
+            
+              <Title heading={2} title="Liste des joueurs à acheter"></Title>
+              <div className="teams-content py-3 h-fit">
+                <ListPlayersWithAction
+                  items={playerToSellItems} 
+                  path={`/players/update/${props.team.data.id}`}
+                  withAction
+                  withTransaction
+                  withBuy
+                  accessToken={props.accessToken}
+                />
+              </div>
+            
+          
         </div>
       </>
     );

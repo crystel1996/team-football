@@ -9,10 +9,12 @@ export interface ListItemInterface {
 export interface ListComponentInterface {
     items: ListItemInterface[];
     withAction?: boolean;
+    withUpdate?: boolean;
+    withBuy?: boolean;
     withTransaction?: boolean;
     path: string;
-    deleteTitle: string;
-    deleteSubtitle: string;
+    deleteTitle?: string;
+    deleteSubtitle?: string;
     
     sellOptions?: {
         sellTitle: string;
@@ -26,7 +28,14 @@ export interface ListComponentInterface {
         success: boolean;
         message: string;
     }>;
-
+    onCancelSell?: (id: string) => Promise<{
+        success: boolean;
+        message: string;
+    }>;
+    onBuy?: (id: string) => Promise<{
+        success: boolean;
+        message: string;
+    }>;
 }
 
 export interface ListWithActionInterface extends ListComponentInterface {

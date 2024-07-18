@@ -28,5 +28,31 @@ export const ListPlayersWithAction: FC<ListWithActionInterface> = (props) => {
         return result;
     };
 
-    return <List {...props} onDelete={handleDelete} onSell={handleSell} />
+    const handleCancelSell = async (idPlayer: string) => {
+        const playerTransaction = new PlayerTransactionService();
+        const result = await playerTransaction.cancelSellPlayer({
+            idPlayer,
+            accessToken: props.accessToken
+        });
+        return result;
+    };
+
+    const handleBuy = async (idPlayer: string) => {
+        const playerTransaction = new PlayerTransactionService();
+        const idTeam = (pathname || '').split('/')[2];
+        const result = await playerTransaction.buyPlayer({
+            idPlayer,
+            idTeam,
+            accessToken: props.accessToken
+        });
+        return result;
+    };
+
+    return <List 
+                {...props} 
+                onDelete={handleDelete} 
+                onSell={handleSell} 
+                onCancelSell={handleCancelSell} 
+                onBuy={handleBuy} 
+            />
 }

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Team;
 use App\Repository\PlayerRepository;
-use App\Repository\PlayerTransactionRepository;
 use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -155,7 +154,6 @@ class TeamController extends AbstractController {
         int $page, 
         Request $request, 
         TeamRepository $teamRepository,
-        PlayerTransactionRepository $playerTransactionRepository,
         SerializerInterface $serializer
     )
     {

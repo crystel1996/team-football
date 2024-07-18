@@ -34,6 +34,13 @@ export const List: FC<ListComponentInterface> = (props) => {
         });
     };
 
+    const handleCancelConfirmSell = () => {
+        setOpenConfirmDelete({
+            id: '',
+            open: false
+        });
+    };
+
     const handleCancel = () => {
         setOpenConfirmDelete({
             id: '',
@@ -67,11 +74,10 @@ export const List: FC<ListComponentInterface> = (props) => {
         });
     };
 
-    const handleCancelSell = () => {
-        setOpenConfirmSell({
-            id: '',
-            open: false
-        });
+    const handleCancelSell = (event: MouseEvent<HTMLElement>, id: string) => {
+        event.stopPropagation();
+        props.onCancelSell && props.onCancelSell(id);
+        window.location.reload();
     };
 
     const handleConfirmSell = async () => {
@@ -92,14 +98,19 @@ export const List: FC<ListComponentInterface> = (props) => {
         }
     };
 
+    const handleBuy = (event: MouseEvent<HTMLElement>, id: string) => {
+        event.stopPropagation();
+        props.onBuy && props.onBuy(id);
+        window.location.reload();
+    };
+
     return <>
-        <ul role="list" className="grid gap-4 grid-cols-3 max-[600px]:grid-cols-2 grid-rows-3 max-[600px]:grid-rows-2">
+        <ul role="list" className="flex flex-wrap">
             {(props.items || []).map((item) => {
-                console.log('[ITEMS]', item)
-                return  <li key={item.name} className="group flex justify-center gap-x-6 py-5 cursor-pointer hover:bg-blue-600">
+                return  <li key={item.name} className="group flex justify-center gap-x-6 py-5 px-2 mx-2 my-2 min-w-40 cursor-pointer hover:bg-blue-600 border border-sky-500 rounded">
                             <div className="flex items-center min-w-0 gap-x-4">
                                 {item.image && (<img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={item.image} alt={item.image} />)}
-                                <div className="min-w-0 flex-auto align-items">
+                                <div className="min-w-0 flex-auto items-start ">
                                     <div>
                                         {item.link && (
                                             <a href={item.link} className="text-sm font-semibold leading-6 text-gray-900 ">{item.name}</a>
@@ -117,14 +128,21 @@ export const List: FC<ListComponentInterface> = (props) => {
                                     )}
                                     {props.withAction && (
                                         <div className="py-1">
-                                            {props.withTransaction && !item.isAwaitingBuyer && (
+                                            {props.withTransaction && !item.isAwaitingBuyer && !props.withBuy && (
                                                 <span onClick={(event) => handleSell(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Vendre</span> 
                                             )}
-                                            {props.withTransaction && item.isAwaitingBuyer && (
-                                                <span onClick={(event) => handleSell(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Annuler la vente</span> 
+                                            {props.withTransaction && item.isAwaitingBuyer && !props.withBuy && (
+                                                <span onClick={(event) => handleCancelSell(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Annuler la vente</span> 
                                             )}
-                                            <a href={`${props.path}/${item.id}`} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white ">Modifier</a>
-                                            <span onClick={(event) => handleDelete(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Supprimer</span>    
+                                            {props.withTransaction && props.withBuy && (
+                                                <span onClick={(event) => handleBuy(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Acheter</span> 
+                                            )}
+                                            {props.withUpdate && (
+                                                <>
+                                                    <a href={`${props.path}/${item.id}`} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white ">Modifier</a>
+                                                    <span onClick={(event) => handleDelete(event, item.id)} className="px-1 underline text-sm font-semibold leading-6 text-gray-900 hover:text-white">Supprimer</span>
+                                                </> 
+                                            )}   
                                         </div>
                                     )}
                                 </div>
@@ -138,8 +156,8 @@ export const List: FC<ListComponentInterface> = (props) => {
                 textCancel="Annuler"
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                title={props.deleteTitle}
-                content={props.deleteSubtitle}
+                title={props.deleteTitle ?? ''}
+                content={props.deleteSubtitle ?? ''}
                 message={error}
             />
         )}
@@ -147,7 +165,7 @@ export const List: FC<ListComponentInterface> = (props) => {
             <Modal
                 textConfirm="Vendre"
                 textCancel="Annuler"
-                onCancel={handleCancelSell}
+                onCancel={handleCancelConfirmSell}
                 onConfirm={handleConfirmSell}
                 title={props.sellOptions?.sellTitle || ''}
                 content={props.sellOptions?.sellSubtitle || ''}

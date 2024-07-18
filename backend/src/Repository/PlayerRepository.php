@@ -49,6 +49,23 @@ class PlayerRepository extends ServiceEntityRepository
         return $player;
     }
 
+    /**
+    * @return Team[] Returns an array of Team objects
+    */
+    public function findAllPlayerForSale(String $idTeam): array
+    {
+
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.isAwaitingBuyer = :val')
+            ->andWhere('p.idTeam != :id_team_id')
+            ->setParameter('val', true)
+            ->setParameter('id_team_id', $idTeam)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     //    /**
     //     * @return Player[] Returns an array of Player objects
     //     */

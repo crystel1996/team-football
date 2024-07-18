@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\PlayerTransaction;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Security\JwtStrategy;
@@ -10,9 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\PlayerRepository;
 use App\Repository\TeamRepository;
-use App\Repository\PlayerTransactionRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PlayerTransactionController extends AbstractController
@@ -29,9 +26,7 @@ class PlayerTransactionController extends AbstractController
     public function sellPlayer(
         Request $request,
         TeamRepository $teamRepository,
-        PlayerRepository $playerRepository,
-        PlayerTransactionRepository $playerTransactionRepository,
-        ValidatorInterface $validator,
+        PlayerRepository $playerRepository
     )
     {
         $token = $request->headers->get('Authorization');
@@ -54,28 +49,13 @@ class PlayerTransactionController extends AbstractController
             return new JsonResponse('Equipe introuvable', Response::HTTP_BAD_REQUEST);
         }
 
-        $playerTransaction = new PlayerTransaction();
-
-        $playerTransaction->setIdPlayer($player);
-        $playerTransaction->setIdTeam($team);
-        $playerTransaction->setType('SELL');
-
-        $errors = $validator->validate($playerTransaction);
-
-        if (count($errors) > 0) {
-            
-            $errorsString = (string) $errors;
-    
-            return new Response($errorsString, Response::HTTP_BAD_REQUEST);
-        }
-
-        $playerTransactionCreated = $playerTransactionRepository->save($playerTransaction);
+        
         $player->setAwaitingBuyer(true);
         $playerRepository->save($player);
 
         return new JsonResponse([
             
-            "team" => $playerTransactionCreated->getId()
+            "player" => $player->getId()
         
         ]);
 
@@ -84,7 +64,7 @@ class PlayerTransactionController extends AbstractController
     #[Route('/api/cancel-selling-player')]
     public function cancelSellPlayer(
         Request $request,
-        PlayerTransactionRepository $playerTransactionRepository,
+        PlayerRepository $playerRepository,
     )
     {
         $token = $request->headers->get('Authorization');
@@ -96,13 +76,15 @@ class PlayerTransactionController extends AbstractController
 
         $payload = json_decode($request->getContent(), false);
 
-        $playerTransaction = $playerTransactionRepository->findOneBy(['id' => $payload->id]);
+        $player = $playerRepository->findOneBy(['id' => $payload->idPlayer]);
 
-        if(!$playerTransaction) {
+        if(!$player) {
             return new JsonResponse('Transaction introuvable', Response::HTTP_BAD_REQUEST);
         }
 
-        $playerTransactionRepository->remove($playerTransaction);
+        $player->setAwaitingBuyer(false);
+
+        $playerRepository->save($player);
 
         return new JsonResponse('Annulation reussi', Response::HTTP_OK);
 
@@ -111,7 +93,6 @@ class PlayerTransactionController extends AbstractController
     #[Route('/api/buy-player')]
     public function buyPlayer(
         Request $request,
-        PlayerTransactionRepository $playerTransactionRepository,
         TeamRepository $teamRepository,
         PlayerRepository $playerRepository
     )
@@ -125,14 +106,10 @@ class PlayerTransactionController extends AbstractController
 
         $payload = json_decode($request->getContent(), false);
 
-        $playerTransaction = $playerTransactionRepository->findOneBy(['id' => $payload->id]);
-        $teamBuyer = $teamRepository->findOneBy(['id' => $payload->idTeamBuyer]);
-        $player = $playerRepository->findOneBy(['id' => $playerTransaction->getIdPlayer()]);
-        $teamSeller = $teamRepository->findOneBy(['id' => $playerTransaction->getIdTeam()]);
-
-        if(!$playerTransaction) {
-            return new JsonResponse('Transaction introuvable', Response::HTTP_BAD_REQUEST);
-        }
+        
+        $teamBuyer = $teamRepository->findOneBy(['id' => $payload->idTeam]);
+        
+        $player = $playerRepository->findOneBy(['id' => $payload->idPlayer]);
 
         if(!$teamBuyer) {
             return new JsonResponse('Equipe introuvable', Response::HTTP_BAD_REQUEST);
@@ -142,27 +119,28 @@ class PlayerTransactionController extends AbstractController
             return new JsonResponse('Joueur introuvable', Response::HTTP_BAD_REQUEST);
         }
 
+        $teamSeller = $teamRepository->findOneBy(['id' => $player->getIdTeam()]);
+
         if(!$teamSeller) {
             return new JsonResponse('Equipe introuvable', Response::HTTP_BAD_REQUEST);
         }
-
-        $playerTransaction->setType('SOLD');
-        $playerTransaction->setIdTeamBuyer($payload->idTeamBuyer);
-
-        $playerTransactionCreated = $playerTransactionRepository->save($playerTransaction);
 
         $teamBuyerSold = ($teamBuyer->getBalance()) - $player->getBalance();
         $teamSellerSold = ($teamSeller->getBalance()) + $player->getBalance();
 
         $teamBuyer->setBalance($teamBuyerSold);
         $teamSeller->setBalance($teamSellerSold);
+        $player->setAwaitingBuyer(false);
+        $player->setIdTeam($teamBuyer);
 
         $teamRepository->save($teamBuyer);
         $teamRepository->save($teamSeller);
+        $playerRepository->save($player);
+
 
         return new JsonResponse([
             
-            "team" => $playerTransactionCreated->getId()
+            "player" => $player->getId()
         
         ]);
 
@@ -171,7 +149,7 @@ class PlayerTransactionController extends AbstractController
     #[Route('/api/list-selling-player')]
     public function ListSellingPlayer(
         Request $request,
-        PlayerTransactionRepository $playerTransactionRepository,
+        PlayerRepository $playerRepository,
         SerializerInterface $serializer
     )
     {
@@ -184,9 +162,9 @@ class PlayerTransactionController extends AbstractController
 
         $payload = json_decode($request->getContent(), false);
 
-        $playerTransactions = $playerTransactionRepository->findAllPlayerTransaction($payload->idTeam, 'SELL');
+        $playerTransactions = $playerRepository->findAllPlayerForSale($payload->idTeam);
 
-        $data = $serializer->serialize($playerTransactions, 'json', ['groups' => 'list_team:read']);
+        $data = $serializer->serialize($playerTransactions, 'json', ['groups' => 'team:read']);
 
         return $this->json([
             "data" => json_decode($data)
