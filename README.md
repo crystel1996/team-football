@@ -39,4 +39,7 @@ Instructions on how to install and set up the project.
   -  Run symfony server:start
 
 ## Live Preview
-[https://team-football.vercel.app/](https://team-football.vercel.app/)
+[https://team-football.vercel.app/](https://team-football.vercel.app/) <br />
+Account to test:
+email: admin@admin.com
+mdp: admin
