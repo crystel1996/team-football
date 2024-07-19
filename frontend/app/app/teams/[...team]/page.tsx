@@ -117,7 +117,6 @@ export default async function TeamsPage({
             <CardWithAction 
               id={props.team.data?.id}
               title={props.team.data?.name} 
-              image={props.team.data?.image} 
               description={description} 
               accessToken={props.accessToken}
               withAction
