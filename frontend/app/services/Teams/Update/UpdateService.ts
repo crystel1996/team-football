@@ -31,21 +31,6 @@ export class UpdateTeamService {
                 message: "Veuillez ajouter le solde."
             }
         }
-        if(!this.input?.image) {
-            return {
-                isValid: false,
-                message: "Veuillez ajouter une photo."
-            }
-        }
-        if(this.input?.image) {
-            const fileType = this.input?.image.type;
-            if (!fileType.startsWith('image/')) {
-                return {
-                    isValid: false,
-                    message: "Veuillez ajouter une photo."
-                }
-            }
-        }
         return {
             isValid: true,
             message: ''
@@ -63,7 +48,6 @@ export class UpdateTeamService {
                     name: this.input?.name,
                     country: this.input?.country,
                     balance: typeof this.input?.balance !== 'number' ? parseInt(this.input?.balance as any) : this.input?.balance,
-                    image: 'https://cdn.statically.io/gh/hjnilsson/country-flags/master/svg/mg.svg' //this.input?.image
                 },
                 headers: {
                     Authorization: 'Bearer ' +  input.accessToken

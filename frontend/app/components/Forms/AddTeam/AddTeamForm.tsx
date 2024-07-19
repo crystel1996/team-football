@@ -7,7 +7,6 @@ const DEFAULT_VALUE: AddTeamsInputInterface = {
     name: '',
     country: '',
     balance: 0,
-    image: undefined
 }
 
 export const AddTeamForm: FC<AddTeamsComponentInterface> = (props) => {
@@ -23,9 +22,6 @@ export const AddTeamForm: FC<AddTeamsComponentInterface> = (props) => {
                 name: props.team.name,
                 country: props.team.country,
                 balance: props.team.balance,
-                image:{
-                    name: props.team.image
-                } as any
             });
         }
     }, [props.team]);
@@ -40,25 +36,10 @@ export const AddTeamForm: FC<AddTeamsComponentInterface> = (props) => {
         });
     };
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        
-        setInput((prev) => {
-            return {
-                ...prev,
-                image: e.target.files?.[0]
-            }
-        });
-        
-    };
-
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
-        const inputStringify = JSON.stringify({...input, image: {
-            size: input.image?.size,
-            name: input.image?.name,
-            type: input.image?.type
-        }});
+        const inputStringify = JSON.stringify(input);
         
         const result = await props.onSubmit(inputStringify);
         
@@ -96,17 +77,7 @@ export const AddTeamForm: FC<AddTeamsComponentInterface> = (props) => {
                             <label htmlFor="balance" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Solde financier</label>
                             <input name="balance" value={input.balance} onChange={handleChange} type="number" id="balance" className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Solde" required />
                         </div>
-                        <div className="mb-4">
-                        <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Image</label>
-                            <input 
-                                id="image"
-                                type="file" 
-                                name="image" 
-                                onChange={handleFileChange} 
-                                className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                                required 
-                            />
-                        </div>
+                        
                         <button disabled={loading} type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">{loading ? 'Chargement...' : 'Sauvegarder'}</button>
                     </form>
                 </div>

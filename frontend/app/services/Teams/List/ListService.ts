@@ -55,7 +55,6 @@ export class ListTeamsService {
                     id: result.data.data.id,
                     balance: result.data.data.balance,
                     country: result.data.data.country,
-                    image: result.data.data.image,
                     name: result.data.data.name,
                     players: result.data.data.players as any
                 }

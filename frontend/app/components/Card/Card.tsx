@@ -54,7 +54,6 @@ export const Card: FC<CardComponentInterface> = (props) => {
 
     return  <>
             <div className="max-w-lg w-full bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row">
-                <img className="w-full md:w-1/3 h-48 md:h-auto object-cover" src={props.image} alt={props.title} />
                 <div className="w-full md:w-2/3 p-4">
                     <h2 className="text-xl font-semibold text-gray-800">{props.title}</h2>
                     <p className="text-gray-600 mt-2">{props.description}</p>

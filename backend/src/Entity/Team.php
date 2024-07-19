@@ -47,10 +47,6 @@ class Team
     #[Groups(["list_team:read", "team:read"])]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(["list_team:read", "team:read"])]
-    private ?string $image = null;
-
     public function __construct()
     {
         $this->players = new ArrayCollection();
@@ -138,7 +134,6 @@ class Team
     {
         $metadata->addPropertyConstraint('name', new NotNull());
         $metadata->addPropertyConstraint('country', new NotNull());
-        $metadata->addPropertyConstraint('image', new NotNull());
     }
 
     public function getSlug(): ?string
@@ -149,18 +144,6 @@ class Team
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
 
         return $this;
     }

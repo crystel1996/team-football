@@ -1,7 +1,6 @@
 export interface ListItemInterface {
     id: string;
     name: string;
-    image?: string;
     isAwaitingBuyer?: boolean;
     link?: string;
     subtitle?: string;

@@ -45,7 +45,6 @@ class TeamController extends AbstractController {
         $team->setName($payload->name);
         $team->setCountry($payload->country);
         $team->setBalance($payload->balance);
-        $team->setImage($payload->image);
         $team->setSlug(str_replace(' ', '-', strtolower($payload->name)));
 
         $errors = $validator->validate($team);
@@ -94,7 +93,6 @@ class TeamController extends AbstractController {
         $team->setName($payload->name);
         $team->setCountry($payload->country);
         $team->setBalance($payload->balance);
-        $team->setImage($payload->image);
         $team->setSlug(str_replace(' ', '-', strtolower($payload->name)));
 
         $errors = $validator->validate($team);

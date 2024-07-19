@@ -107,13 +107,12 @@ export const List: FC<ListComponentInterface> = (props) => {
     return <>
         <ul role="list" className="flex flex-wrap">
             {(props.items || []).map((item) => {
-                return  <li key={item.name} className="group flex justify-center gap-x-6 py-5 px-2 mx-2 my-2 min-w-40 cursor-pointer hover:bg-blue-600 border border-sky-500 rounded">
+                return  <li key={item.name} className="flex justify-center gap-x-6 py-5 px-2 mx-2 my-2 min-w-40 cursor-pointer border border-sky-500 rounded">
                             <div className="flex items-center min-w-0 gap-x-4">
-                                {item.image && (<img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={item.image} alt={item.image} />)}
                                 <div className="min-w-0 flex-auto items-start ">
                                     <div>
                                         {item.link && (
-                                            <a href={item.link} className="text-sm font-semibold leading-6 text-gray-900 ">{item.name}</a>
+                                            <a href={item.link} className="text-sm font-semibold leading-6 text-gray-900 hover:underline">{item.name}</a>
                                         )}
                                         {!item.link && (
                                             <p className="text-sm font-semibold leading-6 text-gray-900 ">{item.name}</p>
@@ -122,7 +121,7 @@ export const List: FC<ListComponentInterface> = (props) => {
                                     {item.subtitle && (
                                         <div>
                                             
-                                            <p  className="text-sm text-gray-600 group-hover:text-white">{item.subtitle}</p>
+                                            <p  className="text-sm text-gray-600">{item.subtitle}</p>
                                             
                                         </div>
                                     )}
