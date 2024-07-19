@@ -31,6 +31,8 @@ Instructions on how to install and set up the project.
   ```sh
   cd backend
   composer install
+  php bin/console make:migration
+  php bin/console doctrine:migrations:migrate
 
   ```
   -  Create the .env file on the backend root
